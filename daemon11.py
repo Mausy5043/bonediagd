@@ -74,27 +74,28 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
+  Tcpu = "NaN"
   # Read the CPU temperature
-  fi   = "/sys/class/thermal/thermal_zone0/temp"
-  f    = file(fi,'r')
-  Tcpu = float(f.read().strip('\n'))/1000
-  f.close()
-  if Tcpu > 75.000:
-    # can't believe my sensors. Probably a glitch. Wait a while then measure again
-    time.sleep(7)
-    fi   = "/sys/class/thermal/thermal_zone0/temp"
-    f    = file(fi,'r')
-    Tcpu = float(f.read().strip('\n'))/1000
-    Tcpu = float(Tcpu) + 0.1
+  #fi   = "/sys/class/thermal/thermal_zone0/temp"
+  #f    = file(fi,'r')
+  #Tcpu = float(f.read().strip('\n'))/1000
+  #f.close()
+  #if Tcpu > 75.000:
+  #  # can't believe my sensors. Probably a glitch. Wait a while then measure again
+  #  time.sleep(7)
+  #  fi   = "/sys/class/thermal/thermal_zone0/temp"
+  #  f    = file(fi,'r')
+  #  Tcpu = float(f.read().strip('\n'))/1000
+  #  Tcpu = float(Tcpu) + 0.1
 
   return Tcpu
 
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-  flock = '/tmp/raspdiagd/11.lock'
+  flock = '/tmp/bonediagd/11.lock'
   lock(flock)
-  f = file('/tmp/raspdiagd/11-t-cpu.csv', 'a')
+  f = file('/tmp/bonediagd/11-t-cpu.csv', 'a')
   f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)
@@ -108,7 +109,7 @@ def unlock(fname):
     os.remove(fname)
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/raspdiagd/11.pid')
+  daemon = MyDaemon('/tmp/bonediagd/11.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()

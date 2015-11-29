@@ -91,16 +91,16 @@ def do_mv_data(rpath):
   while (count_internal_locks > 0):
     time.sleep(1)
     count_internal_locks=0
-    for file in glob.glob(r'/tmp/raspdiagd/*.lock'):
+    for file in glob.glob(r'/tmp/bonediagd/*.lock'):
       count_internal_locks += 1
 
-  for file in glob.glob(r'/tmp/raspdiagd/*.csv'):
+  for file in glob.glob(r'/tmp/bonediagd/*.csv'):
     #print file
     if os.path.isfile(clientlock):
       if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
         shutil.move(file, rpath)
 
-  for file in glob.glob(r'/tmp/raspdiagd/*.png'):
+  for file in glob.glob(r'/tmp/bonediagd/*.png'):
     if os.path.isfile(clientlock):
       if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
         shutil.move(file, rpath)
@@ -124,14 +124,14 @@ def do_xml(wpath):
   fcpu						= float(f.read().strip('\n'))/1000
   f.close()
 
-  fi              = "/home/"+ usr +"/.raspdiagd.branch"
+  fi              = "/home/"+ usr +"/.bonediagd.branch"
   f 							= file(fi,'r')
-  raspdiagdbranch = f.read().strip('\n')
+  bonediagdbranch = f.read().strip('\n')
   f.close()
 
-  fi              = "/home/"+ usr +"/.raspboot.branch"
+  fi              = "/home/"+ usr +"/.boneboot.branch"
   f 							= file(fi,'r')
-  raspbootbranch  = f.read().strip('\n')
+  bonebootbranch  = f.read().strip('\n')
   f.close()
 
   uptime          = commands.getoutput("uptime")
@@ -170,8 +170,8 @@ def do_xml(wpath):
   f.write(' <uptime>\n')
   f.write(uptime + '\n')
   f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
-  f.write(' - raspdiagd   on: '+ raspdiagdbranch +'\n')
-  f.write(' - raspboot    on: '+ raspbootbranch +'\n')
+  f.write(' - bonediagd   on: '+ bonediagdbranch +'\n')
+  f.write(' - boneboot    on: '+ bonebootbranch +'\n')
   f.write('\nTop 10 processes:\n' + psout +'\n')
   f.write('</uptime>\n')
 
@@ -188,7 +188,7 @@ def unlock(fname):
     os.remove(fname)
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/raspdiagd/99.pid')
+  daemon = MyDaemon('/tmp/bonediagd/99.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
