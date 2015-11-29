@@ -114,10 +114,11 @@ def do_xml(wpath):
   usr							= commands.getoutput("whoami")
   uname           = os.uname()
 
-  fi              = "/sys/class/thermal/thermal_zone0/temp"
-  f 							= file(fi,'r')
-  Tcpu            = float(f.read().strip('\n'))/1000
-  f.close()
+  #fi              = "/sys/class/thermal/thermal_zone0/temp"
+  #f 							 = file(fi,'r')
+  #Tcpu            = float(f.read().strip('\n'))/1000
+  Tcpu            = "NaN"
+  #f.close()
 
   fi              = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
   f 							= file(fi,'r')
