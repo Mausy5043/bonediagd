@@ -28,7 +28,7 @@ fi
 # set a cronjob
 echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/bonediagd
 echo "42  * *   *   *   $ME    /home/$ME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | sudo tee --append /etc/cron.d/bonediagd
-echo "@reboot           $ME    /home/$ME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | sudo tee --append /etc/cron.d/bonediagd
+echo "@reboot           $ME    sleep 60; /home/$ME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | sudo tee --append /etc/cron.d/bonediagd
 
 if [ ! -e /mnt/share1 ]; then
   echo "Creating mountpoint..."
