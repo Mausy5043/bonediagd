@@ -76,17 +76,17 @@ def syslog_trace(trace):
 def do_work():
   Tcpu = "NaN"
   # Read the CPU temperature
-  #fi   = "/sys/class/thermal/thermal_zone0/temp"
-  #f    = file(fi,'r')
-  #Tcpu = float(f.read().strip('\n'))/1000
-  #f.close()
-  #if Tcpu > 75.000:
-  #  # can't believe my sensors. Probably a glitch. Wait a while then measure again
-  #  time.sleep(7)
-  #  fi   = "/sys/class/thermal/thermal_zone0/temp"
-  #  f    = file(fi,'r')
-  #  Tcpu = float(f.read().strip('\n'))/1000
-  #  Tcpu = float(Tcpu) + 0.1
+  fi   = "/sys/class/hwmon/hwmon0/device/temp1_input"
+  f    = file(fi,'r')
+  Tcpu = float(f.read().strip('\n'))/1000
+  f.close()
+  if Tcpu > 75.000:
+    # can't believe my sensors. Probably a glitch. Wait a while then measure again
+    time.sleep(7)
+    fi   = "/sys/class/hwmon/hwmon0/device/temp1_input"
+    f    = file(fi,'r')
+    Tcpu = float(f.read().strip('\n'))/1000
+    Tcpu = float(Tcpu) + 0.1
 
   return Tcpu
 
