@@ -117,7 +117,7 @@ def do_xml(wpath):
   #fi              = "/sys/class/thermal/thermal_zone0/temp"
   #f 							 = file(fi,'r')
   #Tcpu            = float(f.read().strip('\n'))/1000
-  #Tcpu            = "NaN"
+  Tcpu            = "NaN"
   #f.close()
 
   fi              = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
@@ -138,6 +138,7 @@ def do_xml(wpath):
   uptime          = commands.getoutput("uptime")
   dfh             = commands.getoutput("df -h")
   freeh           = commands.getoutput("free -h")
+  #psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
   p1              = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"], stdout=subprocess.PIPE)
   p2              = subprocess.Popen(["cut", "-c", "-132"], stdin=p1.stdout, stdout=subprocess.PIPE)
   p3              = subprocess.Popen(["awk", "NR>2"], stdin=p2.stdout, stdout=subprocess.PIPE)
@@ -160,7 +161,7 @@ def do_xml(wpath):
   f.write('</df>\n')
 
   f.write('<temperature>\n')
-  f.write(str(fcpu) +' MHz\n')
+  f.write(str(Tcpu) + ' degC @ '+ str(fcpu) +' MHz\n')
   f.write('</temperature>\n')
 
   f.write('<memusage>\n')
