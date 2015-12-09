@@ -12,7 +12,7 @@ import syslog, traceback
 import os, sys, shutil, glob, platform, time, commands, subprocess
 from libdaemon import Daemon
 
-import Adafruit-BBIO.GPIO as GPIO
+import Adafruit_BBIO.GPIO as GPIO
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
