@@ -21,8 +21,12 @@ class MyDaemon(Daemon):
   def run(self):
     GPIO.setup("USR0", GPIO.OUT)
     GPIO.setup("USR1", GPIO.OUT)
+    GPIO.setup("USR2", GPIO.OUT)
+    GPIO.setup("USR3", GPIO.OUT)
     GPIO.output("USR0", GPIO.HIGH)
     GPIO.output("USR1", GPIO.HIGH)
+    GPIO.output("USR2", GPIO.HIGH)
+    GPIO.output("USR3", GPIO.HIGH)
     sampleptr = 0
     samples = 1
 
@@ -43,6 +47,8 @@ class MyDaemon(Daemon):
 
     GPIO.output("USR0", GPIO.LOW)
     GPIO.output("USR1", GPIO.LOW)
+    GPIO.output("USR2", GPIO.LOW)
+    GPIO.output("USR3", GPIO.LOW)
     while True:
       try:
         startTime=time.time()
