@@ -12,21 +12,21 @@ import syslog, traceback
 import os, sys, shutil, glob, platform, time, commands, subprocess
 from libdaemon import Daemon
 
-import Adafruit_BBIO.GPIO as GPIO
+#import Adafruit_BBIO.GPIO as GPIO
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    GPIO.setup("USR0", GPIO.OUT)
-    GPIO.setup("USR1", GPIO.OUT)
-    GPIO.setup("USR2", GPIO.OUT)
-    GPIO.setup("USR3", GPIO.OUT)
-    GPIO.output("USR0", GPIO.HIGH)
-    GPIO.output("USR1", GPIO.HIGH)
-    GPIO.output("USR2", GPIO.HIGH)
-    GPIO.output("USR3", GPIO.HIGH)
+    #GPIO.setup("USR0", GPIO.OUT)
+    #GPIO.setup("USR1", GPIO.OUT)
+    #GPIO.setup("USR2", GPIO.OUT)
+    #GPIO.setup("USR3", GPIO.OUT)
+    #GPIO.output("USR0", GPIO.HIGH)
+    #GPIO.output("USR1", GPIO.HIGH)
+    #GPIO.output("USR2", GPIO.HIGH)
+    #GPIO.output("USR3", GPIO.HIGH)
     sampleptr = 0
     samples = 1
 
@@ -45,22 +45,22 @@ class MyDaemon(Daemon):
     else:
       time.sleep(waitTime)
 
-    GPIO.output("USR0", GPIO.LOW)
-    GPIO.output("USR1", GPIO.LOW)
-    GPIO.output("USR2", GPIO.LOW)
-    GPIO.output("USR3", GPIO.LOW)
+    #GPIO.output("USR0", GPIO.LOW)
+    #GPIO.output("USR1", GPIO.LOW)
+    #GPIO.output("USR2", GPIO.LOW)
+    #GPIO.output("USR3", GPIO.LOW)
     while True:
       try:
         startTime=time.time()
 
         if os.path.ismount(mount_path):
-          GPIO.output("USR0", GPIO.HIGH)
+          #GPIO.output("USR0", GPIO.HIGH)
           #print 'dataspool is mounted'
           #lock(remote_lock)
           do_mv_data(remote_path)
           do_xml(remote_path)
           #unlock(remote_lock)
-          GPIO.output("USR0", GPIO.LOW)
+          #GPIO.output("USR0", GPIO.LOW)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
