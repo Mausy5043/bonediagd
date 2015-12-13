@@ -34,20 +34,20 @@ def mV2degC(millivolt):
   degC = (degC * tmp36_gain) + tmp36_offset
   return degC
 
-  def do_report(result):
-    # Get the time and date in human-readable form and UN*X-epoch...
-    outDate = commands.getoutput("date '+%FT%H:%M:%S, %s'")
-    flock = '/tmp/TMP36.lock'
-    lock(flock)
-    f = file('/tmp/TMP36.csv', 'a')
-    f.write('{0}, {1}\n'.format(outDate, float(result)) )
-    f.close()
-    unlock(flock)
-    return
+def do_report(result):
+  # Get the time and date in human-readable form and UN*X-epoch...
+  outDate = commands.getoutput("date '+%FT%H:%M:%S, %s'")
+  flock = '/tmp/TMP36.lock'
+  lock(flock)
+  f = file('/tmp/TMP36.csv', 'a')
+  f.write('{0}, {1}\n'.format(outDate, float(result)) )
+  f.close()
+  unlock(flock)
+  return
 
-  def lock(fname):
-    open(fname, 'a').close()
+def lock(fname):
+  open(fname, 'a').close()
 
-  def unlock(fname):
-    if os.path.isfile(fname):
-      os.remove(fname)
+def unlock(fname):
+  if os.path.isfile(fname):
+    os.remove(fname)
