@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import Adafruit_BBIO.ADC as ADC
-import time, commands
+import time, commands, os
 
 sensor_pin = 'AIN6'
 # sensor calibration data
