@@ -9,8 +9,8 @@ sensor_pin = 'AIN6'
 # TMP36   DS18
 # 17.86    19.16
 
-tmp36_gain = 1.0
-tmp36_offset = 0.0
+tmp36_gain = 1.115
+tmp36_offset = 0.58
 
 ADC.setup()
 
