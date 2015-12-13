@@ -16,7 +16,7 @@ while True:
     temp_c = (millivolts - 500) / 10
     temp_c = temp_c * tmp36_gain + tmp36_offset
 
-    raw_millivolt = ADC.raw_read(sensor_pin)
+    raw_millivolt = ADC.read_raw(sensor_pin)
     temp_cr = (raw_millivolt - 500) / 10
     print('mv=%d C=%.2f rw=%d F=%.2f' % (millivolts, temp_c, raw_millivolt, temp_cr))
     time.sleep(30)
