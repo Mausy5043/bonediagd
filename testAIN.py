@@ -7,8 +7,8 @@ sensor_pin = 'AIN6'
 #tmp36_mV2deg =
 
 # TMP36   DS18
-# 18.2    20.54
-# 18.4    20.0
+# 17.86    19.16
+
 tmp36_gain = 1.0
 tmp36_offset = 0.0
 
@@ -38,7 +38,7 @@ def unlock(fname):
     os.remove(fname)
 
 if __name__ == "__main__":
-  
+
   while True:
     #reading = ADC.read(sensor_pin)
     #millivolts = reading * 1800.0  # reference = 1800 mV
