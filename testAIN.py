@@ -14,21 +14,6 @@ tmp36_offset = 0.0
 
 ADC.setup()
 
-while True:
-  #reading = ADC.read(sensor_pin)
-  #millivolts = reading * 1800.0  # reference = 1800 mV
-  #temp_c = mV2degC(millivolts)
-  #temp_c = (millivolts - 500) / 10.0
-  #temp_c = temp_c * tmp36_gain + tmp36_offset
-
-  raw_millivolt = ADC.read_raw(sensor_pin)
-  temp_cr = mV2degC(raw_millivolt)
-  #temp_cr = (raw_millivolt - 500) / 10.0
-  #temp_cr = temp_cr * tmp36_gain + tmp36_offset
-  #print('mv=%d C=%.2f rw=%d Cr=%.2f' % (millivolts, temp_c, raw_millivolt, temp_cr))
-  do_result(temp_cr)
-  time.sleep(60)
-
 def mV2degC(millivolt):
   degC = (millivolt - 500.0) / 10.0
   degC = (degC * tmp36_gain) + tmp36_offset
@@ -51,3 +36,20 @@ def lock(fname):
 def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
+
+if __name__ == "__main__":
+  
+  while True:
+    #reading = ADC.read(sensor_pin)
+    #millivolts = reading * 1800.0  # reference = 1800 mV
+    #temp_c = mV2degC(millivolts)
+    #temp_c = (millivolts - 500) / 10.0
+    #temp_c = temp_c * tmp36_gain + tmp36_offset
+
+    raw_millivolt = ADC.read_raw(sensor_pin)
+    temp_cr = mV2degC(raw_millivolt)
+    #temp_cr = (raw_millivolt - 500) / 10.0
+    #temp_cr = temp_cr * tmp36_gain + tmp36_offset
+    #print('mv=%d C=%.2f rw=%d Cr=%.2f' % (millivolts, temp_c, raw_millivolt, temp_cr))
+    do_report(temp_cr)
+    time.sleep(60)
