@@ -22,7 +22,7 @@ TMP36_offset = 0.0
 ADC.setup()
 
 def mV2degC(millivolt):
-  degC = (degC * TMP36_gain) + TMP36_offset
+  degC = (millivolt * TMP36_gain) + TMP36_offset
   return degC
 
 def do_report(result):
