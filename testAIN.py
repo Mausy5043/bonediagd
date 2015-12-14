@@ -3,19 +3,25 @@ import Adafruit_BBIO.ADC as ADC
 import time, commands, os
 
 sensor_pin = 'AIN6'
-# sensor calibration data
-#tmp36_mV2deg =
+# SENSOR CALIBRATION PROCEDURE
+# Given the existing gain and offset.
+# 1 Determine a linear least-squares fit between the output of this program and
+#   data obtained from the selected reference
+# 2 The least-squares fit will yield the gain(calc) and offset(calc)
+# 3 Determine gain(new) and offset(new) as shown here:
+#     gain(new)   = gain(old)   * gain(calc)
+#     offset(new) = offset(old) * gain(calc) + offset(calc)
+# 4 Replace the existing values for gain(old) and offset(old) with the values
+#   found for gain(new) and offset(new)
 
-# TMP36   DS18
-# 17.86    19.16
-
-tmp36_gain = 1.115
-tmp36_offset = -0.58
+# gain(old)
+tmp36_gain = 1.0
+# offset(old)
+tmp36_offset = 0.0
 
 ADC.setup()
 
 def mV2degC(millivolt):
-  degC = (millivolt - 500.0) / 10.0
   degC = (degC * tmp36_gain) + tmp36_offset
   return degC
 
