@@ -93,7 +93,8 @@ def wc(filename):
 
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
-  outDate = commands.getoutput("date '+%FT%H:%M:%S, %s'")
+  outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
+  #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
   result = ', '.join(map(str, result))
   flock = '/tmp/bonediagd/15.lock'

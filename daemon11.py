@@ -92,7 +92,6 @@ def do_work():
 
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
-  #outDate = commands.getoutput("date '+%FT%H:%M:%S, %s'")
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   flock = '/tmp/bonediagd/11.lock'
   lock(flock)
