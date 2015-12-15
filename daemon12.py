@@ -23,7 +23,7 @@ class MyDaemon(Daemon):
     SamplesPerCycle = 5
     samples = SamplesPerCycle * cycles
 
-    datapoints = 11
+    #datapoints = 11
     data = []
 
     sampleTime = 12
@@ -81,13 +81,13 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
-  # 6 datapoints gathered here
+  # 6 #datapoints gathered here
   fi   = "/proc/loadavg"
   f    = file(fi,'r')
   outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
   f.close()
 
-  # 5 datapoints gathered here
+  # 5 #datapoints gathered here
   outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
   outCpuUS = outCpu[12]
   outCpuSY = outCpu[13]

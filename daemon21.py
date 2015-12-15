@@ -6,11 +6,13 @@
 
 # Adapted by M.Hendrix [2015]
 
-# daemon14.py measures the memory usage.
-# These are all counters, therefore no averaging is needed.
+# daemon21.py measures the TMP36 temperature.
+# uses moving averages
 
 import syslog, traceback
 import os, sys, time, math
+import Adafruit_BBIO.ADC as ADC
+
 from libdaemon import Daemon
 
 DEBUG = False
@@ -19,27 +21,42 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
-    samples = 1
-    #datapoints = 8
+    cycles = 1                                # number of cycles to aggregate
+    samplesperCycle = 5                       # total number of samples in each cycle
+    samples = samplesperCycle * cycles        # total number of samples averaged
+    sampleTime = 60/samplesperCycle           # time [s] between samples
+    cycleTime = samples * sampleTime          # time [s] per cycle
 
-    sampleTime = 60
-    cycleTime = samples * sampleTime
+    data = []                                 # array for holding sampledata
+
     # sync to whole minute
-    waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
+    ## FIXME: sync to cycletime  not to cycles*cycletime!
+    # e.g. 5 cycles of 1' -> log every cycle (1').
+    waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
     if DEBUG:
       print "NOT waiting {0} s.".format(waitTime)
     else:
       time.sleep(waitTime)
+
     while True:
       try:
         startTime = time.time()
 
-        result = do_work().split(',')
-        data = map(int, result)
+        # **** Get sample value
+        result = do_work()
+        if DEBUG:print result
+        # **** Store sample value
+        data.append(float(result))              # add a sample at the end
+        if (len(data) > samples):data.pop(0)    # remove oldest sample from the start
 
-        sampleptr = sampleptr + 1
-        if (sampleptr == samples):
-          do_report(data)
+        sampleptr = sampleptr + 1               #
+
+        # report sample average
+        if (sampleptr % samplesperCycle == 0):
+          if DEBUG:print data
+          averages = sum(data[:]) / len(data)
+          if DEBUG:print averages
+          do_report(averages)
           if (sampleptr == samples):
             sampleptr = 0
 
@@ -62,56 +79,17 @@ def syslog_trace(trace):
     if len(line):
       syslog.syslog(syslog.LOG_ALERT,line)
 
-def cat(filename):
-  ret = ""
-  if os.path.isfile(filename):
-    f = file(filename,'r')
-    ret = f.read().strip('\n')
-    f.close()
-  return ret
-
 def do_work():
-  # 8 #datapoints gathered here
-  # memory /proc/meminfo
-  # total = MemTotal
-  # free = MemFree - (Buffers + Cached)
-  # inUse = (MemTotal - MemFree) - (Buffers + Cached)
-  # swaptotal = SwapTotal
-  # swapUse = SwapTotal - SwapFree
-  # ref: http://thoughtsbyclayg.blogspot.nl/2008/09/display-free-memory-on-linux-ubuntu.html
-  # ref: http://serverfault.com/questions/85470/meaning-of-the-buffers-cache-line-in-the-output-of-free
-
-  out = cat("/proc/meminfo").splitlines()
-  for line in range(0,len(out)-1):
-    mem = out[line].split()
-    if mem[0] == 'MemFree:':
-      outMemFree = int(mem[1])
-    elif mem[0] == 'MemTotal:':
-      outMemTotal = int(mem[1])
-    elif mem[0] == 'Buffers:':
-      outMemBuf = int(mem[1])
-    elif mem[0] == 'Cached:':
-      outMemCache = int(mem[1])
-    elif mem[0] == 'SwapTotal:':
-      outMemSwapTotal = int(mem[1])
-    elif mem[0] == "SwapFree:":
-      outMemSwapFree = int(mem[1])
-
-  outMemUsed = outMemTotal - (outMemFree + outMemBuf + outMemCache)
-  outMemSwapUsed = outMemSwapTotal - outMemSwapFree
-
-  return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(outMemTotal, outMemUsed, outMemBuf, outMemCache, outMemFree, outMemSwapTotal, outMemSwapFree, outMemSwapUsed)
+  T = "NaN"
+  return T
 
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-
-  result = ', '.join(map(str, result))
-  flock = '/tmp/bonediagd/14.lock'
+  flock = '/tmp/bonediagd/21.lock'
   lock(flock)
-  f = file('/tmp/bonediagd/14-memory.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, result) )
+  f = file('/tmp/TMP36.csv', 'a')
+  f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)
   return
@@ -124,7 +102,7 @@ def unlock(fname):
     os.remove(fname)
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/bonediagd/14.pid')
+  daemon = MyDaemon('/tmp/bonediagd/21.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()

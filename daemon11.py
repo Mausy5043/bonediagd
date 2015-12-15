@@ -23,7 +23,7 @@ class MyDaemon(Daemon):
     SamplesPerCycle = 5
     samples = SamplesPerCycle * cycles
 
-    datapoints = 1
+    #datapoints = 1
     data = []      # data = [None for i in range(samples)]
 
     sampleTime = 12

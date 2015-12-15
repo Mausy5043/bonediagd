@@ -20,7 +20,7 @@ class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
     samples = 1
-    datapoints = 6
+    #datapoints = 6
 
     sampleTime = 60
     cycleTime = samples * sampleTime
@@ -71,7 +71,7 @@ def cat(filename):
   return ret
 
 def do_work():
-  # 6 datapoints gathered here
+  # 6 #datapoints gathered here
   # Network traffic
   wlIn = 0
   wlOut = 0

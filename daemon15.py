@@ -22,7 +22,7 @@ class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
     samples = 1
-    datapoints = 3
+    #datapoints = 3
     if IS_SYSTEMD:
       sampleTime = 180
     else:
@@ -67,7 +67,7 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
-  # 3 datapoints gathered here
+  # 3 #datapoints gathered here
   kernlog=messlog=syslog=0
 
   if IS_SYSTEMD:
