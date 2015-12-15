@@ -20,6 +20,7 @@ from libdaemon import Daemon
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 ADC.setup()
+sensor_pin = 'AIN6'
 
 class MyDaemon(Daemon):
   def run(self):
