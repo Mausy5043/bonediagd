@@ -23,23 +23,14 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
-    cycles = 3                                # number of cycles to aggregate
-    samplesperCycle = 5                       # total number of samples in each cycle
-    samples = samplesperCycle * cycles        # total number of samples averaged
-    sampleTime = 60/samplesperCycle           # time [s] between samples
-    cycleTime = samples * sampleTime          # time [s] per cycle
-    reportTime = 1 * samplesperCycle * sampleTime                # time [s] between reports
+    reportTime = 60                                 # time [s] between reports
+    cycles = 3                                      # number of cycles to aggregate
+    samplesperCycle = 5                             # total number of samples in each cycle
+    samples = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime = samples * sampleTime                # time [s] per cycle
 
-    data = []                                 # array for holding sampledata
-
-    # sync to whole minute
-    ## FIXME: sync to cycletime  not to cycles*cycletime!
-    # e.g. 5 cycles of 1' -> log every cycle (1').
-    #waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
-    #if DEBUG:
-    #  print "NOT waiting {0} s.".format(waitTime)
-    #else:
-    #  time.sleep(waitTime)
+    data = []                                       # array for holding sampledata
 
     while True:
       try:
@@ -49,22 +40,22 @@ class MyDaemon(Daemon):
         result = do_work()
         if DEBUG:print result
         # **** Store sample value
-        data.append(float(result))              # add a sample at the end
-        if (len(data) > samples):data.pop(0)    # remove oldest sample from the start
+        data.append(float(result))                  # add a sample at the end
+        if (len(data) > samples):data.pop(0)        # remove oldest sample from the start
 
-        sampleptr = sampleptr + 1               #
+        sampleptr += 1                              # 1-up sampleptr
 
         # report sample average
-        if (startTime % reportTime < sampleTime):
+        if (startTime % reportTime < sampleTime):   # sync reports to reportTime
           if DEBUG:print data
           averages = sum(data[:]) / len(data)
           if DEBUG:print averages
           do_report(averages)
-          if (sampleptr == samples):
+          if (sampleptr == samples):                # re-set sampleptr
             sampleptr = 0
 
-        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)   # sync to sampleTime [s]
-        if (waitTime > 0):
+        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        if (waitTime > 0):                          # sync to sampleTime [s]
           if DEBUG:print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
       except Exception as e:

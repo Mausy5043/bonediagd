@@ -24,6 +24,7 @@ rm *.pyc
  DIFFd13=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon13.py)
  DIFFd14=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon14.py)
  DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
+ DIFFd21=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon21.py)
  DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
 
  git pull
@@ -62,6 +63,10 @@ if [[ -n "$DIFFd15" ]]; then
   logger -p user.notice -t bonediagd "Source daemon15 has changed."
   ./daemon15.py stop
 fi
+if [[ -n "$DIFFd21" ]]; then
+  logger -p user.notice -t bonediagd "Source daemon21 has changed."
+  ./daemon21.py stop
+fi
 if [[ -n "$DIFFd99" ]]; then
   logger -p user.notice -t bonediagd "Source daemon99 has changed."
   ./daemon99.py stop
@@ -75,6 +80,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon13.py stop
   ./daemon14.py stop
   ./daemon15.py stop
+  ./daemon21.py stop
   ./daemon99.py stop
 fi
 
@@ -98,6 +104,7 @@ destale 12
 destale 13
 destale 14
 destale 15
+destale 21
 destale 99
 
 case "$CLNT" in
