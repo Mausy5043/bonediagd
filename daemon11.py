@@ -18,22 +18,16 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
-    cycles = 3
-    SamplesPerCycle = 5
-    samples = SamplesPerCycle * cycles
+      sampleptr = 0
+      reportTime = 60                                 # time [s] between reports
+      cycles = 3                                      # number of cycles to aggregate
+      samplesperCycle = 5                             # total number of samples in each cycle
+      samples = samplesperCycle * cycles              # total number of samples averaged
+      sampleTime = reportTime/samplesperCycle         # time [s] between samples
+      cycleTime = samples * sampleTime                # time [s] per cycle
 
-    #datapoints = 1
-    data = []      # data = [None for i in range(samples)]
+      data = []                                       # array for holding sampledata
 
-    sampleTime = 12
-    cycleTime = samples * sampleTime
-    # sync to whole minute
-    waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
-    if DEBUG:
-      print "NOT waiting {0} s.".format(waitTime)
-    else:
-      time.sleep(waitTime)
     while True:
       try:
         startTime = time.time()
@@ -43,10 +37,10 @@ class MyDaemon(Daemon):
 
         data.append(float(result))
         if (len(data) > samples):data.pop(0)
-        sampleptr = sampleptr + 1
+        sampleptr += 1
 
         # report sample average
-        if (sampleptr % SamplesPerCycle == 0):
+        if (startTime % reportTime < sampleTime):
           if DEBUG:print data
           averages = sum(data[:]) / len(data)
           if DEBUG:print averages

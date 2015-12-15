@@ -43,7 +43,6 @@ class MyDaemon(Daemon):
         # **** Store sample value
         data.append(float(result))                  # add a sample at the end
         if (len(data) > samples):data.pop(0)        # remove oldest sample from the start
-
         sampleptr += 1                              # 1-up sampleptr
 
         # report sample average
@@ -75,7 +74,7 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
-  T = randint(0,9)
+  T = = ADC.read_raw(sensor_pin)
   return T
 
 def do_report(result):
