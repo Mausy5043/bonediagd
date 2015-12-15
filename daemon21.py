@@ -13,6 +13,8 @@ import syslog, traceback
 import os, sys, time, math
 import Adafruit_BBIO.ADC as ADC
 
+from random import randint
+
 from libdaemon import Daemon
 
 DEBUG = False
@@ -61,7 +63,7 @@ class MyDaemon(Daemon):
           if (sampleptr == samples):
             sampleptr = 0
 
-        waitTime = (time.time() - startTime) - (startTime%sampleTime)   # sync to sampleTime [s]
+        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)   # sync to sampleTime [s]
         if (waitTime > 0):
           if DEBUG:print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
@@ -81,7 +83,7 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
-  T = "NaN"
+  T = randint(0,9)
   return T
 
 def do_report(result):
