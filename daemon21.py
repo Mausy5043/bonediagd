@@ -75,7 +75,7 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
-  T = = ADC.read_raw(sensor_pin)
+  T = ADC.read_raw(sensor_pin)
   return T
 
 def do_report(result):
