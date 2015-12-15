@@ -65,7 +65,7 @@ if [[ -n "$DIFFd15" ]]; then
 fi
 if [[ -n "$DIFFd21" ]]; then
   logger -p user.notice -t bonediagd "Source daemon21 has changed."
-  ./daemon21.py stop
+  sudo ./daemon21.py stop
 fi
 if [[ -n "$DIFFd99" ]]; then
   logger -p user.notice -t bonediagd "Source daemon99 has changed."
@@ -80,7 +80,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon13.py stop
   ./daemon14.py stop
   ./daemon15.py stop
-  ./daemon21.py stop
+  sudo ./daemon21.py stop
   ./daemon99.py stop
 fi
 
@@ -99,13 +99,27 @@ function destale {
   fi
 }
 
+function sudestale {
+  if [ -e /tmp/bonediagd/$1.pid ]; then
+    if ! kill -0 $(cat /tmp/bonediagd/$1.pid)  > /dev/null 2>&1; then
+      logger -p user.err -t bonediagd "Stale daemon$1 pid-file found."
+      rm /tmp/bonediagd/$1.pid
+      sudo ./daemon$1.py start
+    fi
+  else
+    logger -p user.warn -t bonediagd "Found daemon$1 not running."
+    sudo ./daemon$1.py start
+  fi
+}
+
 destale 11
 destale 12
 destale 13
 destale 14
 destale 15
-destale 21
 destale 99
+
+sudestale 21
 
 case "$CLNT" in
   bbone )   echo "BeagleBone Black"
