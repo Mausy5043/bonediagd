@@ -21,22 +21,23 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
-    cycles = 1                                # number of cycles to aggregate
+    cycles = 3                                # number of cycles to aggregate
     samplesperCycle = 5                       # total number of samples in each cycle
     samples = samplesperCycle * cycles        # total number of samples averaged
     sampleTime = 60/samplesperCycle           # time [s] between samples
     cycleTime = samples * sampleTime          # time [s] per cycle
+    reportTime = 1 * samplesperCycle * sampleTime                # time [s] between reports
 
     data = []                                 # array for holding sampledata
 
     # sync to whole minute
     ## FIXME: sync to cycletime  not to cycles*cycletime!
     # e.g. 5 cycles of 1' -> log every cycle (1').
-    waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
-    if DEBUG:
-      print "NOT waiting {0} s.".format(waitTime)
-    else:
-      time.sleep(waitTime)
+    #waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
+    #if DEBUG:
+    #  print "NOT waiting {0} s.".format(waitTime)
+    #else:
+    #  time.sleep(waitTime)
 
     while True:
       try:
@@ -52,7 +53,7 @@ class MyDaemon(Daemon):
         sampleptr = sampleptr + 1               #
 
         # report sample average
-        if (sampleptr % samplesperCycle == 0):
+        if (startTime % reportTime < sampleTime):
           if DEBUG:print data
           averages = sum(data[:]) / len(data)
           if DEBUG:print averages
@@ -60,7 +61,7 @@ class MyDaemon(Daemon):
           if (sampleptr == samples):
             sampleptr = 0
 
-        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        waitTime = (time.time() - startTime) - (startTime%sampleTime)   # sync to sampleTime [s]
         if (waitTime > 0):
           if DEBUG:print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
