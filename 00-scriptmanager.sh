@@ -101,9 +101,9 @@ function destale {
 
 function sudestale {
   if [ -e /tmp/bonediagd/$1.pid ]; then
-    if ! kill -0 $(cat /tmp/bonediagd/$1.pid)  > /dev/null 2>&1; then
+    if ! sudo kill -0 $(sudo cat /tmp/bonediagd/$1.pid)  > /dev/null 2>&1; then
       logger -p user.err -t bonediagd "Stale daemon$1 pid-file found."
-      rm /tmp/bonediagd/$1.pid
+      sudo rm /tmp/bonediagd/$1.pid
       sudo ./daemon$1.py start
     fi
   else
