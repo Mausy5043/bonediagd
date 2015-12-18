@@ -7,8 +7,8 @@
 CLNT=$(hostname)
 ME=$(whoami)
 HERE=$(pwd)
-branch=$(cat $HERE/.bonediagd.branch)
-pushd $HERE/bonediagd
+branch=$(cat $HOME/.bonediagd.branch)
+pushd $HOME/bonediagd
 
 # force recompilation of libraries
 rm *.pyc

@@ -18,7 +18,7 @@ date
 # To suppress git detecting changes by chmod:
 git config core.fileMode false
 # set the branch
-echo "roottest" > $HERE/.bonediagd.branch
+echo "roottest" > $HOME/.bonediagd.branch
 
 if [ ! -d /etc/cron.d ]; then
   echo "Creating /etc/cron.d..."
@@ -27,8 +27,8 @@ fi
 
 # set a cronjob
 echo "# m h dom mon dow user  command" | tee /etc/cron.d/bonediagd
-echo "42  * *   *   *   $ME    $HERE/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | tee --append /etc/cron.d/bonediagd
-echo "@reboot           $ME    sleep 60; $HERE/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | tee --append /etc/cron.d/bonediagd
+echo "42  * *   *   *   $ME    $HOME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | tee --append /etc/cron.d/bonediagd
+echo "@reboot           $ME    sleep 60; $HOME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | tee --append /etc/cron.d/bonediagd
 
 if [ ! -e /mnt/share1 ]; then
   echo "Creating mountpoint..."
