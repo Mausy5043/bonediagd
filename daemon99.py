@@ -129,7 +129,7 @@ def do_mv_data(rpath):
 def do_xml(wpath):
   #
   usr							= commands.getoutput("whoami")
-  here            = commands.getoutput("pwd")
+  home            = "/root"
   uname           = os.uname()
 
   fi              = "/sys/class/hwmon/hwmon0/device/temp1_input"
@@ -142,12 +142,12 @@ def do_xml(wpath):
   fcpu						= float(f.read().strip('\n'))/1000
   f.close()
 
-  fi              = here + "/.bonediagd.branch"
+  fi              = home + "/.bonediagd.branch"
   f 							= file(fi,'r')
   bonediagdbranch = f.read().strip('\n')
   f.close()
 
-  fi              = here + "/.boneboot.branch"
+  fi              = home + "/.boneboot.branch"
   f 							= file(fi,'r')
   bonebootbranch  = f.read().strip('\n')
   f.close()
