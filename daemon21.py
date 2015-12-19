@@ -24,7 +24,6 @@ sensor_pin = 'AIN6'
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
     reportTime = 60                                 # time [s] between reports
     cycles = 3                                      # number of cycles to aggregate
     samplesperCycle = 5                             # total number of samples in each cycle
@@ -44,7 +43,6 @@ class MyDaemon(Daemon):
         # **** Store sample value
         data.append(float(result))                  # add a sample at the end
         if (len(data) > samples):data.pop(0)        # remove oldest sample from the start
-        sampleptr += 1                              # 1-up sampleptr
 
         # report sample average
         if (startTime % reportTime < sampleTime):   # sync reports to reportTime
@@ -52,8 +50,6 @@ class MyDaemon(Daemon):
           averages = sum(data[:]) / len(data)
           if DEBUG:print averages
           do_report(averages)
-          if (sampleptr == samples):                # re-set sampleptr
-            sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):                          # sync to sampleTime [s]

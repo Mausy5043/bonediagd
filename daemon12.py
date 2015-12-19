@@ -18,7 +18,6 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
     reportTime = 60                                 # time [s] between reports
     cycles = 3                                      # number of cycles to aggregate
     samplesperCycle = 5                             # total number of samples in each cycle
@@ -37,23 +36,21 @@ class MyDaemon(Daemon):
 
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
-        sampleptr += 1
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          if DEBUG:print data
+          #if DEBUG:print data
           somma = map(sum,zip(*data))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
           averages = [format(s / len(data), '.3f') for s in somma]
+          if DEBUG:print "average:", averages
           # Report the last measurement for these parameters:
-          averages[3]=int(data[sampleptr-1][3])
-          averages[4]=int(data[sampleptr-1][4])
-          averages[5]=int(data[sampleptr-1][5])
+          averages[3]=int(data[-1][3])
+          averages[4]=int(data[-1][4])
+          averages[5]=int(data[-1][5])
           if DEBUG:print "average:", averages
           do_report(averages)
-          if (sampleptr == samples):
-            sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):

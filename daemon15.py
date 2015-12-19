@@ -20,7 +20,6 @@ os.nice(15)
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
     if IS_SYSTEMD:
       reportTime = 180
     else:
@@ -40,12 +39,14 @@ class MyDaemon(Daemon):
 
         result = do_work().split(',')
         data = map(int, result)
-        sampleptr += 1
-        
-        if (sampleptr == samples):
-          do_report(data)
-          if (sampleptr == samples):
-            sampleptr = 0
+
+        # report sample average
+        if (startTime % reportTime < sampleTime):
+          if DEBUG:print data
+          averages = data
+          #averages = sum(data[:]) / len(data)
+          #if DEBUG:print averages
+          do_report(averages)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):

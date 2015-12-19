@@ -27,7 +27,6 @@ class MyDaemon(Daemon):
     #GPIO.output("USR1", GPIO.HIGH)
     #GPIO.output("USR2", GPIO.HIGH)
     #GPIO.output("USR3", GPIO.HIGH)
-    sampleptr = 0
     samples = 1
 
     sampleTime = 60
