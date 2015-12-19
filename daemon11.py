@@ -102,7 +102,11 @@ if __name__ == "__main__":
   daemon = MyDaemon('/tmp/bonediagd/11.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
-      daemon.start()
+      if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
+        daemon.start()
+      else:
+        print "Hardware missing!"
+        sys.exit(2)
     elif 'stop' == sys.argv[1]:
       daemon.stop()
     elif 'restart' == sys.argv[1]:

@@ -131,10 +131,12 @@ def do_xml(wpath):
   home            = "/root"
   uname           = os.uname()
 
-  fi              = "/sys/class/hwmon/hwmon0/device/temp1_input"
-  f 							= file(fi,'r')
-  Tcpu            = float(f.read().strip('\n'))/1000
-  f.close()
+  Tcpu = "(no T-sensor)"
+  if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
+    fi              = "/sys/class/hwmon/hwmon0/device/temp1_input"
+    f 							= file(fi,'r')
+    Tcpu            = float(f.read().strip('\n'))/1000
+    f.close()
 
   fi              = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
   f 							= file(fi,'r')
