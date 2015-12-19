@@ -27,7 +27,6 @@ class MyDaemon(Daemon):
     #GPIO.output("USR1", GPIO.HIGH)
     #GPIO.output("USR2", GPIO.HIGH)
     #GPIO.output("USR3", GPIO.HIGH)
-    sampleptr = 0
     samples = 1
 
     sampleTime = 60
@@ -129,12 +128,12 @@ def do_mv_data(rpath):
 def do_xml(wpath):
   #
   usr							= commands.getoutput("whoami")
+  home            = "/root"
   uname           = os.uname()
 
   fi              = "/sys/class/hwmon/hwmon0/device/temp1_input"
-  f 							 = file(fi,'r')
+  f 							= file(fi,'r')
   Tcpu            = float(f.read().strip('\n'))/1000
-  #Tcpu            = "NaN"
   f.close()
 
   fi              = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
@@ -142,12 +141,12 @@ def do_xml(wpath):
   fcpu						= float(f.read().strip('\n'))/1000
   f.close()
 
-  fi              = "/home/"+ usr +"/.bonediagd.branch"
+  fi              = home + "/.bonediagd.branch"
   f 							= file(fi,'r')
   bonediagdbranch = f.read().strip('\n')
   f.close()
 
-  fi              = "/home/"+ usr +"/.boneboot.branch"
+  fi              = home + "/.boneboot.branch"
   f 							= file(fi,'r')
   bonebootbranch  = f.read().strip('\n')
   f.close()
