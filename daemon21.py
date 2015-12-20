@@ -33,7 +33,7 @@ sensor_pin = 'AIN6'
 #   found for gain(new) and offset(new)
 
 # gain(old)
-TMP36_gain = 100
+TMP36_gain = 0.1
 # offset(old)
 TMP36_offset = -50.0
 
