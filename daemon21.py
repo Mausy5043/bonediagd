@@ -67,9 +67,9 @@ class MyDaemon(Daemon):
         print "Error %d: %s" % (e.args[0],e.args[1])
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
+      # attempt to close connection to MySQLdb
       if consql:consql.close()
       raise
-    finally:
 
     # Initialise parameters
     reportTime = 60                                 # time [s] between reports
@@ -116,6 +116,8 @@ class MyDaemon(Daemon):
           print e.message
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
+        # attempt to close connection to MySQLdb
+        if consql:consql.close()
         raise
 
 def syslog_trace(trace):
