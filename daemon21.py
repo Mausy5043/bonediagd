@@ -131,7 +131,6 @@ def do_work():
   D.append(V)
   T = V * TMP36_gain + TMP36_offset
   D.append(T)
-  if DEBUG:print D
   return D
 
 def do_report(result):
