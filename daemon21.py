@@ -76,7 +76,7 @@ class MyDaemon(Daemon):
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):                          # sync to sampleTime [s]
           if DEBUG:print "Waiting {0} s".format(waitTime)
-            GPIO.output("USR0", GPIO.LOW)
+          GPIO.output("USR0", GPIO.LOW)
           time.sleep(waitTime)
       except Exception as e:
         if DEBUG:
