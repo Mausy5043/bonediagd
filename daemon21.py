@@ -13,13 +13,13 @@ import syslog, traceback
 import os, sys, time, math
 import Adafruit_BBIO.ADC  as ADC
 import Adafruit_BBIO.GPIO as GPIO
+import MySQLdb as mdb
 
 # own libraries:
 from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
-ADC.setup()
 sensor_pin = 'AIN6'
 # SENSOR CALIBRATION PROCEDURE
 # Given the existing gain and offset.
@@ -39,7 +39,39 @@ TMP36_offset = -50.0
 
 class MyDaemon(Daemon):
   def run(self):
-    GPIO.setup("USR0", GPIO.OUT)
+    # Initialisation
+    try:
+      # Initialise hardware
+      ADC.setup()
+      GPIO.setup("USR0", GPIO.OUT)
+    except Exception as e:
+      if DEBUG:
+        print("Unexpected error:")
+        print e.message
+      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+      syslog_trace(traceback.format_exc())
+      raise
+    try:
+      # Initialise MySQLdb
+      consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
+      # activate a cursor
+      cursql = consql.cursor()
+      # test the connection
+      cursql.execute("SELECT VERSION()")
+      versql = "" cursql.fetchone()
+      logtext = "{0} : {1}".format("Attached to MySQL server", versql)
+      syslog.syslog(syslog.LOG_ALERT, logtext)
+    except mdb.Error, e:
+      if DEBUG:
+        print("Unexpected MySQL error")
+        print "Error %d: %s" % (e.args[0],e.args[1])
+      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+      syslog_trace(traceback.format_exc())
+      if consql:consql.close()
+      raise
+    finally:
+
+    # Initialise parameters
     reportTime = 60                                 # time [s] between reports
     cycles = 3                                      # number of cycles to aggregate
     samplesperCycle = 5                             # total number of samples in each cycle
