@@ -1,5 +1,3 @@
-# Below are the commands required to recreate (without data) the table for DHCPNS
-
 USE domotica;
 
 DROP TABLE IF EXISTS tmp36;
