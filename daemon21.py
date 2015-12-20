@@ -21,6 +21,21 @@ DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 ADC.setup()
 sensor_pin = 'AIN6'
+# SENSOR CALIBRATION PROCEDURE
+# Given the existing gain and offset.
+# 1 Determine a linear least-squares fit between the output of this program and
+#   data obtained from the selected reference
+# 2 The least-squares fit will yield the gain(calc) and offset(calc)
+# 3 Determine gain(new) and offset(new) as shown here:
+#     gain(new)   = gain(old)   * gain(calc)
+#     offset(new) = offset(old) * gain(calc) + offset(calc)
+# 4 Replace the existing values for gain(old) and offset(old) with the values
+#   found for gain(new) and offset(new)
+
+# gain(old)
+TMP36_gain = 1.0
+# offset(old)
+TMP36_offset = 0.0
 
 class MyDaemon(Daemon):
   def run(self):
@@ -71,8 +86,13 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
-  T = ADC.read_raw(sensor_pin)
-  return T
+  D = []
+  V = ADC.read_raw(sensor_pin)
+  D.append(V)
+  T = V * TMP36_gain + TMP36_offset
+  D.append(T)
+  if DEBUG:print D
+  return D
 
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
