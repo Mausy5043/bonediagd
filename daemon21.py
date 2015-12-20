@@ -11,10 +11,10 @@
 
 import syslog, traceback
 import os, sys, time, math
-import Adafruit_BBIO.ADC as ADC
+import Adafruit_BBIO.ADC  as ADC
+import Adafruit_BBIO.GPIO as GPIO
 
-from random import randint
-
+# own libraries:
 from libdaemon import Daemon
 
 DEBUG = False
@@ -33,12 +33,13 @@ sensor_pin = 'AIN6'
 #   found for gain(new) and offset(new)
 
 # gain(old)
-TMP36_gain = 1.0
+TMP36_gain = 100
 # offset(old)
-TMP36_offset = 0.0
+TMP36_offset = -50.0
 
 class MyDaemon(Daemon):
   def run(self):
+    GPIO.setup("USR0", GPIO.OUT)
     reportTime = 60                                 # time [s] between reports
     cycles = 3                                      # number of cycles to aggregate
     samplesperCycle = 5                             # total number of samples in each cycle
@@ -52,23 +53,30 @@ class MyDaemon(Daemon):
       try:
         startTime = time.time()
 
+        GPIO.output("USR0", GPIO.HIGH)
+
         # **** Get sample value
         result = do_work()
         if DEBUG:print result
         # **** Store sample value
-        data.append(float(result))                  # add a sample at the end
+        data.append(map(float,result))                  # add a sample at the end
         if (len(data) > samples):data.pop(0)        # remove oldest sample from the start
 
         # report sample average
         if (startTime % reportTime < sampleTime):   # sync reports to reportTime
           if DEBUG:print data
-          averages = sum(data[:]) / len(data)
+          # for single parameter arrays:
+          #averages = sum(data[:]) / len(data)
+          # for multiple parameter arrays:
+          somma = map(sum,zip(*data))
+          averages = [format(s / len(data), '.3f') for s in somma]
           if DEBUG:print averages
           do_report(averages)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):                          # sync to sampleTime [s]
           if DEBUG:print "Waiting {0} s".format(waitTime)
+            GPIO.output("USR0", GPIO.LOW)
           time.sleep(waitTime)
       except Exception as e:
         if DEBUG:
@@ -97,10 +105,11 @@ def do_work():
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
+  result = ', '.join(map(str, result))
   flock = '/tmp/bonediagd/21.lock'
   lock(flock)
   f = file('/tmp/TMP36.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, float(result)) )
+  f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
   unlock(flock)
   return
