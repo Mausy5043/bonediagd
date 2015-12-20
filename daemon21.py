@@ -58,9 +58,9 @@ class MyDaemon(Daemon):
       cursql = consql.cursor()
       # test the connection
       cursql.execute("SELECT VERSION()")
-      versql = "" cursql.fetchone()
+      versql = cursql.fetchone()
       logtext = "{0} : {1}".format("Attached to MySQL server", versql)
-      syslog.syslog(syslog.LOG_ALERT, logtext)
+      syslog.syslog(syslog.LOG_INFO, logtext)
     except mdb.Error, e:
       if DEBUG:
         print("Unexpected MySQL error")
