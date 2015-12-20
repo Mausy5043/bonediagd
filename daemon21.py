@@ -101,7 +101,7 @@ class MyDaemon(Daemon):
           #averages = sum(data[:]) / len(data)
           # for multiple parameter arrays:
           somma = map(sum,zip(*data))
-          averages = [format(s / len(data), '.3f') for s in somma]
+          averages = [format(s / len(data), '.2f') for s in somma]
           if DEBUG:print averages
           do_report(averages)
 
