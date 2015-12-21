@@ -41,14 +41,6 @@ TMP36_offset = -50.0
 try:
   # Initialise MySQLdb
   consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
-  # activate a cursor
-  cursql = consql.cursor()
-  # test the connection
-  cursql.execute("SELECT VERSION()")
-  versql = cursql.fetchone()
-  cursql.close()
-  logtext = "{0} : {1}".format("Attached to MySQL server", versql)
-  syslog.syslog(syslog.LOG_INFO, logtext)
 except mdb.Error, e:
   if DEBUG:
     print("Unexpected MySQL error")
@@ -56,7 +48,7 @@ except mdb.Error, e:
   syslog.syslog(syslog.LOG_ALERT,e.__doc__)
   syslog_trace(traceback.format_exc())
   # attempt to close connection to MySQLdb
-  if consql:consql.close()
+  if consql.open:consql.close()
   raise
 
 class MyDaemon(Daemon):
@@ -73,6 +65,16 @@ class MyDaemon(Daemon):
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
       raise
+    if consql.open:
+      # activate a cursor
+      cursql = consql.cursor()
+      # test the connection
+      cursql.execute("SELECT VERSION()")
+      versql = cursql.fetchone()
+      cursql.close()
+      logtext = "{0} : {1}".format("Attached to MySQL server", versql)
+      syslog.syslog(syslog.LOG_INFO, logtext)
+
 
     # Initialise parameters
     reportTime = 60                                 # time [s] between reports
