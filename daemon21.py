@@ -20,6 +20,7 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
+
 sensor_pin = 'AIN6'
 # SENSOR CALIBRATION PROCEDURE
 # Given the existing gain and offset.
@@ -37,6 +38,27 @@ TMP36_gain = 0.1
 # offset(old)
 TMP36_offset = -50.0
 
+try:
+  # Initialise MySQLdb
+  consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
+  # activate a cursor
+  cursql = consql.cursor()
+  # test the connection
+  cursql.execute("SELECT VERSION()")
+  versql = cursql.fetchone()
+  cursql.close()
+  logtext = "{0} : {1}".format("Attached to MySQL server", versql)
+  syslog.syslog(syslog.LOG_INFO, logtext)
+except mdb.Error, e:
+  if DEBUG:
+    print("Unexpected MySQL error")
+    print "Error %d: %s" % (e.args[0],e.args[1])
+  syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+  syslog_trace(traceback.format_exc())
+  # attempt to close connection to MySQLdb
+  if consql:consql.close()
+  raise
+
 class MyDaemon(Daemon):
   def run(self):
     # Initialisation
@@ -50,25 +72,6 @@ class MyDaemon(Daemon):
         print e.message
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
-      raise
-    try:
-      # Initialise MySQLdb
-      consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
-      # activate a cursor
-      cursql = consql.cursor()
-      # test the connection
-      cursql.execute("SELECT VERSION()")
-      versql = cursql.fetchone()
-      logtext = "{0} : {1}".format("Attached to MySQL server", versql)
-      syslog.syslog(syslog.LOG_INFO, logtext)
-    except mdb.Error, e:
-      if DEBUG:
-        print("Unexpected MySQL error")
-        print "Error %d: %s" % (e.args[0],e.args[1])
-      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-      syslog_trace(traceback.format_exc())
-      # attempt to close connection to MySQLdb
-      if consql:consql.close()
       raise
 
     # Initialise parameters
