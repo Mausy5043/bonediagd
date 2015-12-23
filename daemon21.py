@@ -164,13 +164,10 @@ if __name__ == "__main__":
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
-      syslog.syslog(syslog.LOG_DEBUG, "after daemon.start()")
     elif 'stop' == sys.argv[1]:
       daemon.stop()
-      syslog.syslog(syslog.LOG_DEBUG, "after daemon.stop()")
     elif 'restart' == sys.argv[1]:
       daemon.restart()
-      syslog.syslog(syslog.LOG_DEBUG, "after daemon.restart()")
     elif 'foreground' == sys.argv[1]:
       # assist with debugging.
       print "Debug-mode started. Use <Ctrl>+C to stop."

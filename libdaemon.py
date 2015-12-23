@@ -112,7 +112,7 @@ class Daemon:
 
     # Try killing the daemon process
     try:
-      message = "Stopped process \n"
+      message = "Stopped process. \n"
       syslog.syslog(syslog.LOG_INFO,message)
       sys.stderr.write(message)
 
