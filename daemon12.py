@@ -33,7 +33,6 @@ class MyDaemon(Daemon):
 
         result = do_work().split(',')
         if DEBUG:print result
-
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
 
