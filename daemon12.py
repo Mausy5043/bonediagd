@@ -32,18 +32,18 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work().split(',')
-        if DEBUG:print result
+        if DEBUG:print "result    :",result
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
 
         # report sample average
         if (startTime % reportTime < sampleTime):
-          #if DEBUG:print data
+          if DEBUG:print "data   :",data
           somma = map(sum,zip(*data))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
           averages = [format(s / len(data), '.3f') for s in somma]
-          if DEBUG:print "average:", averages
+          if DEBUG:print "average :", averages
           # Report the last measurement for these parameters:
           averages[3]=int(data[-1][3])
           averages[4]=int(data[-1][4])
