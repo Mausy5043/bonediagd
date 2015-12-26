@@ -67,6 +67,9 @@ def syslog_trace(trace):
     if len(line):
       syslog.syslog(syslog.LOG_ALERT,line)
 
+def wc(filename):
+    return int(check_output(["wc", "-l", filename]).split()[0])
+
 def do_work():
   # 3 #datapoints gathered here
   kernlog=messlog=syslog=0
@@ -89,13 +92,9 @@ def do_work():
     syslog  = wc("/var/log/syslog")
   return '{0}, {1}, {2}'.format(critlog, warnlog, syslog)
 
-def wc(filename):
-    return int(check_output(["wc", "-l", filename]).split()[0])
-
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
   result = ', '.join(map(str, result))
   flock = '/tmp/bonediagd/15.lock'
