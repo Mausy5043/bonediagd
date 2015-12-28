@@ -119,10 +119,13 @@ class MyDaemon(Daemon):
         if DEBUG:
           print("Unexpected error:")
           print e.message
+        # attempt to close connection to MySQLdb
+        if consql:
+          print("Closing MySQL connection")
+          syslog.syslog(syslog.LOG_ALERT,"Closing MySQL connection")
+          consql.close()
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
-        # attempt to close connection to MySQLdb
-        if consql:consql.close()
         raise
 
 def syslog_trace(trace):
