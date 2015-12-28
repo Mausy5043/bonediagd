@@ -57,7 +57,7 @@ class MyDaemon(Daemon):
     try:
       # Initialise hardware
       ADC.setup()
-      GPIO.setup("USR0", GPIOOUT)
+      GPIO.setup("USR0", GPIO.OUT)
     except Exception as e:
       if DEBUG:
         print("Unexpected error:")
@@ -65,8 +65,8 @@ class MyDaemon(Daemon):
       # attempt to close connection to MySQLdb
       if consql:
         if DEBUG:print("Closing MySQL connection")
-        syslog.syslog(syslog.LOG_ALERT,"Closing MySQL connection")
         consql.close()
+        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
       raise
@@ -128,8 +128,8 @@ class MyDaemon(Daemon):
         # attempt to close connection to MySQLdb
         if consql:
           if DEBUG:print("Closing MySQL connection")
-          syslog.syslog(syslog.LOG_ALERT,"Closing MySQL connection")
           consql.close()
+          syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
         raise
