@@ -38,8 +38,7 @@ TMP36_gain = 0.1
 # offset(old)
 TMP36_offset = -50.0
 
-try:
-  # Initialise MySQLdb
+try:              # Initialise MySQLdb
   consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
 except mdb.Error, e:
   if DEBUG:
@@ -56,9 +55,7 @@ except mdb.Error, e:
 
 class MyDaemon(Daemon):
   def run(self):
-    # Initialisation
-    try:
-      # Initialise hardware
+    try:      # Initialise hardware
       ADC.setup()
       GPIO.setup("USR0", GPIO.OUT)
     except Exception as e:
@@ -74,8 +71,8 @@ class MyDaemon(Daemon):
       syslog_trace(traceback.format_exc())
       raise
 
-    if consql.open:
-      # activate a cursor
+          # Hardware initialised succesfully -> get a cursor on the DB.
+    if consql.open:           # activate a cursor
       cursql = consql.cursor()
       # test the connection
       cursql.execute("SELECT VERSION()")
@@ -83,7 +80,6 @@ class MyDaemon(Daemon):
       cursql.close()
       logtext = "{0} : {1}".format("Attached to MySQL server", versql)
       syslog.syslog(syslog.LOG_INFO, logtext)
-
 
     # Initialise parameters
     reportTime = 60                                 # time [s] between reports
@@ -117,7 +113,7 @@ class MyDaemon(Daemon):
           somma = map(sum,zip(*data))
           averages = [format(s / len(data), '.2f') for s in somma]
           if DEBUG:print averages
-          do_report(averages)
+          do_report(averages, consql)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):                          # sync to sampleTime [s]
@@ -152,7 +148,7 @@ def do_work():
   D.append(T)
   return D
 
-def do_report(result):
+def do_report(result,cnsql):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   result = ', '.join(map(str, result))
@@ -162,6 +158,17 @@ def do_report(result):
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
   unlock(flock)
+  
+  t_sample=outDate.split(',')
+  cursql = cnsql.cursor()
+  cmd = ('INSERT INTO tmp36 '
+                    '(sample_time, sample_epoch, raw_value, temperature) '
+                    'VALUES (%s, %s, %s, %s)')
+  dat = (t_sample[0], int(t_sample[1]), result[0], result[1] )
+  cursql.execute(cmd, dat)
+  cursql.commit()
+  cursql.close()
+
   return
 
 def lock(fname):
