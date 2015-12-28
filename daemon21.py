@@ -158,7 +158,7 @@ def do_report(result,cnsql):
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
   unlock(flock)
-  
+
   t_sample=outDate.split(',')
   cursql = cnsql.cursor()
   cmd = ('INSERT INTO tmp36 '
@@ -166,7 +166,7 @@ def do_report(result,cnsql):
                     'VALUES (%s, %s, %s, %s)')
   dat = (t_sample[0], int(t_sample[1]), result[0], result[1] )
   cursql.execute(cmd, dat)
-  cursql.commit()
+  cnsql.commit()
   cursql.close()
 
   return
