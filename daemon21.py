@@ -45,10 +45,13 @@ except mdb.Error, e:
   if DEBUG:
     print("Unexpected MySQL error")
     print "Error %d: %s" % (e.args[0],e.args[1])
+  # attempt to close connection to MySQLdb
+  if consql:
+    if DEBUG:print("Closing MySQL connection")
+    consql.close()
+    syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
   syslog.syslog(syslog.LOG_ALERT,e.__doc__)
   syslog_trace(traceback.format_exc())
-  # attempt to close connection to MySQLdb
-  if consql.open:consql.close()
   raise
 
 class MyDaemon(Daemon):
