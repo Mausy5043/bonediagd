@@ -57,14 +57,20 @@ class MyDaemon(Daemon):
     try:
       # Initialise hardware
       ADC.setup()
-      GPIO.setup("USR0", GPIO.OUT)
+      GPIO.setup("USR0", GPIOOUT)
     except Exception as e:
       if DEBUG:
         print("Unexpected error:")
         print e.message
+      # attempt to close connection to MySQLdb
+      if consql:
+        if DEBUG:print("Closing MySQL connection")
+        syslog.syslog(syslog.LOG_ALERT,"Closing MySQL connection")
+        consql.close()
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
       raise
+
     if consql.open:
       # activate a cursor
       cursql = consql.cursor()
@@ -96,7 +102,7 @@ class MyDaemon(Daemon):
         result = do_work()
         if DEBUG:print result
         # **** Store sample value
-        data.append(map(float,result))                  # add a sample at the end
+        data.append(map(float,result))              # add a sample at the end
         if (len(data) > samples):data.pop(0)        # remove oldest sample from the start
 
         # report sample average
@@ -121,7 +127,7 @@ class MyDaemon(Daemon):
           print e.message
         # attempt to close connection to MySQLdb
         if consql:
-          print("Closing MySQL connection")
+          if DEBUG:print("Closing MySQL connection")
           syslog.syslog(syslog.LOG_ALERT,"Closing MySQL connection")
           consql.close()
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
