@@ -44,28 +44,19 @@ class MyDaemon(Daemon):
   def run(self):
     try:              # Initialise MySQLdb
       consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
+
+      if consql.open: # Hardware initialised succesfully -> get a cursor on the DB.
+        cursql = consql.cursor()
+        cursql.execute("SELECT VERSION()")
+        versql = cursql.fetchone()
+        cursql.close()
+        logtext = "{0} : {1}".format("Attached to MySQL server", versql)
+        syslog.syslog(syslog.LOG_INFO, logtext)
     except mdb.Error, e:
       if DEBUG:
         print("Unexpected MySQL error")
         print "Error %d: %s" % (e.args[0],e.args[1])
-      # attempt to close connection to MySQLdb
-      if consql:
-        if DEBUG:print("Closing MySQL connection")
-        consql.close()
-        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
-      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-      syslog_trace(traceback.format_exc())
-      raise
-      
-    try:      # Initialise hardware
-      ADC.setup()
-      GPIO.setup("USR0", GPIO.OUT)
-    except Exception as e:
-      if DEBUG:
-        print("Unexpected error:")
-        print e.message
-      # attempt to close connection to MySQLdb
-      if consql:
+      if consql:    # attempt to close connection to MySQLdb
         if DEBUG:print("Closing MySQL connection")
         consql.close()
         syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
@@ -73,15 +64,21 @@ class MyDaemon(Daemon):
       syslog_trace(traceback.format_exc())
       raise
 
-          # Hardware initialised succesfully -> get a cursor on the DB.
-    if consql.open:           # activate a cursor
-      cursql = consql.cursor()
-      # test the connection
-      cursql.execute("SELECT VERSION()")
-      versql = cursql.fetchone()
-      cursql.close()
-      logtext = "{0} : {1}".format("Attached to MySQL server", versql)
-      syslog.syslog(syslog.LOG_INFO, logtext)
+    try:      # Initialise hardware
+      ADC.setup()
+      GPIO.setup("USR0", GPIO.OUT)
+    except Exception as e:
+      if DEBUG:
+        print("Unexpected error:")
+        print e.message
+      if consql:    # attempt to close connection to MySQLdb
+        if DEBUG:print("Closing MySQL connection")
+        consql.close()
+        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+      syslog_trace(traceback.format_exc())
+      raise
+
 
     # Initialise parameters
     reportTime = 60                                 # time [s] between reports
@@ -153,11 +150,11 @@ def do_work():
 def do_report(result,cnsql):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  result = ', '.join(map(str, result))
+  fresult = ', '.join(map(str, result))
   flock = '/tmp/bonediagd/21.lock'
   lock(flock)
   f = file('/tmp/TMP36.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, result) )
+  f.write('{0}, {1}\n'.format(outDate, fresult) )
   f.close()
   unlock(flock)
 
@@ -170,7 +167,6 @@ def do_report(result,cnsql):
   cursql.execute(cmd, dat)
   cnsql.commit()
   cursql.close()
-
   return
 
 def lock(fname):
