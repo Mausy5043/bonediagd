@@ -25,7 +25,7 @@ sensor_pin = 'AIN6'
 # SENSOR CALIBRATION PROCEDURE
 # Given the existing gain and offset.
 # 1 Determine a linear least-squares fit between the output of this program and
-#   data obtained from the selected reference
+#   data obtained from a reference sensor
 # 2 The least-squares fit will yield the gain(calc) and offset(calc)
 # 3 Determine gain(new) and offset(new) as shown here:
 #     gain(new)   = gain(old)   * gain(calc)
@@ -150,13 +150,13 @@ def do_work():
 def do_report(result,cnsql):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  fresult = ', '.join(map(str, result))
-  flock = '/tmp/bonediagd/21.lock'
-  lock(flock)
-  f = file('/tmp/TMP36.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, fresult) )
-  f.close()
-  unlock(flock)
+  #fresult = ', '.join(map(str, result))
+  #flock = '/tmp/bonediagd/21.lock'
+  #lock(flock)
+  #f = file('/tmp/TMP36.csv', 'a')
+  #f.write('{0}, {1}\n'.format(outDate, fresult) )
+  #f.close()
+  #unlock(flock)
 
   t_sample=outDate.split(',')
   cursql = cnsql.cursor()
