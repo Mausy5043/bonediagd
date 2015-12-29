@@ -38,23 +38,25 @@ TMP36_gain = 0.1
 # offset(old)
 TMP36_offset = -50.0
 
-try:              # Initialise MySQLdb
-  consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
-except mdb.Error, e:
-  if DEBUG:
-    print("Unexpected MySQL error")
-    print "Error %d: %s" % (e.args[0],e.args[1])
-  # attempt to close connection to MySQLdb
-  if consql:
-    if DEBUG:print("Closing MySQL connection")
-    consql.close()
-    syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
-  syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-  syslog_trace(traceback.format_exc())
-  raise
+
 
 class MyDaemon(Daemon):
   def run(self):
+    try:              # Initialise MySQLdb
+      consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
+    except mdb.Error, e:
+      if DEBUG:
+        print("Unexpected MySQL error")
+        print "Error %d: %s" % (e.args[0],e.args[1])
+      # attempt to close connection to MySQLdb
+      if consql:
+        if DEBUG:print("Closing MySQL connection")
+        consql.close()
+        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+      syslog_trace(traceback.format_exc())
+      raise
+      
     try:      # Initialise hardware
       ADC.setup()
       GPIO.setup("USR0", GPIO.OUT)
