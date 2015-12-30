@@ -111,6 +111,7 @@ destale 21
 
 case "$CLNT" in
   bbone )   echo "BeagleBone Black"
+            ./testgraph.sh
             ;;
   * )       echo "!! undefined client !!"
             ;;
