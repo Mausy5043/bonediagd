@@ -1,3 +1,6 @@
+# MySQL script
+# create table for TMP36 readings
+
 USE domotica;
 
 DROP TABLE IF EXISTS tmp36;
