@@ -118,8 +118,8 @@ def do_mv_data(rpath):
 
   for file in glob.glob(r'/tmp/bonediagd/*.png'):
     if os.path.isfile(clientlock):
-      if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
-        shutil.move(file, rpath)
+      #if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
+      shutil.move(file, rpath)
 
   unlock(clientlock)
 
