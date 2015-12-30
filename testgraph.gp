@@ -18,7 +18,7 @@ set xlabel "Date/Time"
 #set xrange ["$YESTERDAY":"$TODAY"]
 
 # Y-axis ranges from 0 deg C to 100 deg C, same scale as for humidity
-set yrange [15:25]
+set yrange [15:20]
 
 # Y2-axis set from 800 to 1200 kPa, used for barometric pressure
 set autoscale y2
