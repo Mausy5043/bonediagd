@@ -3,7 +3,7 @@
 set datafile separator ';'
 
 # Title of the plot
-set title "Test graph -`echo $TIMEZONEGAP`-"
+set title "Test graph -`echo "$TIMEZONEGAP"`-"
 
 # We want a grid
 set grid
@@ -34,6 +34,7 @@ set y2label "Raw values [mV]"
 
 # Define that data on X-axis should be interpreted as time
 set xdata time
+set xtic rotate by -45
 
 # Time in log-file is given in Unix format
 set timefmt "%s"
