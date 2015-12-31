@@ -3,7 +3,7 @@
 set datafile separator ';'
 
 # Title of the plot
-set title "Test graph `echo $TIMEZONEGAP`"
+set title "Test graph -`echo $TIMEZONEGAP`-"
 
 # We want a grid
 set grid
