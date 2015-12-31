@@ -54,5 +54,5 @@ set output "/tmp/bonediagd/plot.png"
 # 4 is calculated temperature
 
 # read data from file and generate plot
-plot "/tmp/sql.csv" using 2:4 title "Temperature [degC]" with lines \
-                ,"" using 2:3 title "Raw signal [mV]" with lines axes x1y2 \
+plot "/tmp/sql.csv" using ($2+3600):4 title "Temperature [degC]" with lines \
+                ,"" using ($2+3600):3 title "Raw signal [mV]" with lines axes x1y2 \
