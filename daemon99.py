@@ -36,14 +36,7 @@ class MyDaemon(Daemon):
     mount_path = '/mnt/share1/'
     remote_path = mount_path + myname
     remote_lock = remote_path + '/client.lock'
-
-    # sync to whole minute
-    waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
-    if DEBUG:
-      print "NOT waiting {0} s.".format(waitTime)
-    else:
-      time.sleep(waitTime)
-
+    
     #GPIO.output("USR0", GPIO.LOW)
     #GPIO.output("USR1", GPIO.LOW)
     #GPIO.output("USR2", GPIO.LOW)
