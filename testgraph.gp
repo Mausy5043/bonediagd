@@ -39,7 +39,7 @@ set xdata time
 set timefmt "%s"
 
 # Display notation for time
-set format x "%R"    # Display time in 24 hour notation on the X axis
+set format x "%D\n%R"    # Display time in 24 hour notation on the X axis
 
 # generate a legend which is placed underneath the plot
 set key outside bottom center box title "--legend--"
