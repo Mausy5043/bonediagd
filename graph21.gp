@@ -4,6 +4,7 @@
 
 # ************************************************************* Statistics *****
 # stats to be calculated here
+print tz_gap
 
 # ******************************************************* General settings *****
 set datafile separator ';'
@@ -11,7 +12,7 @@ set datafile missing "NaN"   # Ignore missing values
 set grid
 
 # ****************************************************************** Title *****
-set title "Test graph -`echo "$TIMEZONEGAP"`-"
+set title "Test graph -".tz_gap."-"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -32,7 +33,7 @@ set y2tics border         # place ticks on second Y2-axis
 
 # ***************************************************************** Legend *****
 # generate a legend which is placed underneath the plot
-set key outside bottom center box title "--legend--"
+set key outside bottom center box title "-=legend=-"
 
 # ***************************************************************** Output *****
 set terminal png large
@@ -44,5 +45,5 @@ set output "/tmp/bonediagd/plot.png"
 # 4 is calculated temperature
 
 # ***** PLOT *****
-plot "/tmp/sql.csv" using ($2+3600):4 title "Temperature [degC]" with lines \
-                ,"" using ($2+3600):3 title "Raw signal [mV]"    with lines axes x1y2 \
+plot "/tmp/sql.csv" using ($2+tz_gap):4 title "Temperature [degC]" with lines \
+                ,"" using ($2+tz_gap):3 title "Raw signal [mV]"    with lines axes x1y2 \
