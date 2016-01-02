@@ -11,7 +11,10 @@ set datafile missing "NaN"   # Ignore missing values
 set grid
 
 # ****************************************************************** Title *****
-set title "Test graph -".tz_gap."-"
+set title "Test graph -".utc_offset."-"
+
+tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
+                              # for timezone ourselves.
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -44,6 +47,6 @@ set output "/tmp/bonediagd/plot.png"
 # 4 is calculated temperature
 
 # ***** PLOT *****
-plot "/tmp/sql21.csv"    using ($2+tz_gap):4 title "Temperature [degC]"      with lines \
-                  ,""    using ($2+tz_gap):3 title "Raw signal [mV]"         with lines axes x1y2 \
-     ,"/tmp/sql21b.csv"  using ($2+tz_gap):3 title "Room temperature [degC]" with lines \
+plot "/tmp/sql21.csv"    using ($2+utc_offset):4 title "Temperature [degC]"      with lines \
+                  ,""    using ($2+utc_offset):3 title "Raw signal [mV]"         with lines axes x1y2 \
+     ,"/tmp/sql21b.csv"  using ($2+utc_offset):3 title "Room temperature [degC]" with lines \
