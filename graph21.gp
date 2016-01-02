@@ -45,5 +45,6 @@ set output "/tmp/bonediagd/plot.png"
 # 4 is calculated temperature
 
 # ***** PLOT *****
-plot "/tmp/sql.csv" using ($2+tz_gap):4 title "Temperature [degC]" with lines \
-                ,"" using ($2+tz_gap):3 title "Raw signal [mV]"    with lines axes x1y2 \
+plot "/tmp/sql21.csv"   using ($2+tz_gap):4 title "Temperature [degC]"      with lines \
+                  ,""   using ($2+tz_gap):3 title "Raw signal [mV]"         with lines axes x1y2 \
+     "/tmp/sql21b.csv"  using ($2+tz_gap):3 title "Room temperature [degC]" with lines \

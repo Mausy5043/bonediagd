@@ -7,6 +7,7 @@ UTCSECONDS=$(date -d "$UTC" +%s)
 TIMEZONEGAP=$(($LOCALSECONDS-$UTCSECONDS))
 
 pushd $HOME/bonediagd
-  mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM tmp36 where (sample_time) >=NOW() - INTERVAL 24 HOUR;" | sed 's/\t/;/g;s/\n//g' > /tmp/sql.csv
+  mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM tmp36 where (sample_time) >=NOW() - INTERVAL 24 HOUR;" | sed 's/\t/;/g;s/\n//g' > /tmp/sql21.csv
+  mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM temper where (sample_time) >=NOW() - INTERVAL 24 HOUR;" | sed 's/\t/;/g;s/\n//g' > /tmp/sql21b.csv
   gnuplot -e "tz_gap='${TIMEZONEGAP}'" ./graph21.gp
 popd
