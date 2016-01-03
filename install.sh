@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # 'boneboot' is manually installed and run.
 

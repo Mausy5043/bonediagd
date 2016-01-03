@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # 00-scriptmanager.sh is run periodically by a private cronjob.
 # * It synchronises the local copy of bonediagd with the current github branch
