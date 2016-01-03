@@ -62,6 +62,7 @@ def do_mv_data(rpath):
   time.sleep(3)
 
   while os.path.isfile(hostlock):
+    if DEBUG:print "hostlock exists"
     # wait while the server has locked the directory
     time.sleep(1)
 
@@ -70,6 +71,7 @@ def do_mv_data(rpath):
 
   # prevent race conditions
   while os.path.isfile(hostlock):
+    if DEBUG:print "hostlock exists. WTF?"
     # wait while the server has locked the directory
     time.sleep(1)
 
@@ -78,19 +80,21 @@ def do_mv_data(rpath):
     count_internal_locks=0
     for file in glob.glob(r'/tmp/bonediagd/*.lock'):
       count_internal_locks += 1
+    if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
 
   for file in glob.glob(r'/tmp/bonediagd/*.csv'):
-    #print file
     if os.path.isfile(clientlock):
       if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
+        if DEBUG:print "moving data " + file
         shutil.move(file, rpath)
 
   for file in glob.glob(r'/tmp/bonediagd/*.png'):
     if os.path.isfile(clientlock):
-      shutil.move(file, rpath)
+      if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
+        shutil.move(file, rpath)
 
   unlock(clientlock)
-
+  if DEBUG:print "unlocked..."
   return
 
 def lock(fname):
