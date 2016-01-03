@@ -5,10 +5,8 @@
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
 CLNT=$(hostname)
-ME=$(whoami)
-HERE=$(pwd)
-branch=$(cat $HOME/.bonediagd.branch)
-pushd $HOME/bonediagd
+branch=$(cat "$HOME/.bonediagd.branch")
+pushd "$HOME/bonediagd"
 
 # force recompilation of libraries
 rm *.pyc
@@ -19,20 +17,20 @@ rm *.pyc
  # git diff --name-only
  # git log --graph --oneline --date-order --decorate --color --all
 
- DIFFlib=$(git --no-pager diff --name-only $branch..origin/$branch -- ./libdaemon.py)
- DIFFd11=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon11.py)
- DIFFd12=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon12.py)
- DIFFd13=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon13.py)
- DIFFd14=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon14.py)
- DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
- DIFFd21=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon21.py)
- DIFFd98=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon98.py)
- DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
+ DIFFlib=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./libdaemon.py)
+ DIFFd11=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon11.py)
+ DIFFd12=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon12.py)
+ DIFFd13=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon13.py)
+ DIFFd14=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon14.py)
+ DIFFd15=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon15.py)
+ DIFFd21=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon21.py)
+ DIFFd98=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon98.py)
+ DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
 
  git pull
  git fetch origin
- git checkout $branch
- git reset --hard origin/$branch && \
+ git checkout "$branch"
+ git reset --hard "origin/$branch" && \
  git clean -f -d
 
 #python -m compileall .
@@ -94,15 +92,15 @@ fi
 ######## (Re-)start daemons ######
 
 function destale {
-  if [ -e /tmp/bonediagd/$1.pid ]; then
-    if ! kill -0 $(cat /tmp/bonediagd/$1.pid)  > /dev/null 2>&1; then
+  if [ -e "/tmp/bonediagd/$1.pid" ]; then
+    if ! kill -0 $(cat "/tmp/bonediagd/$1.pid")  > /dev/null 2>&1; then
       logger -p user.err -t bonediagd "Stale daemon$1 pid-file found."
-      rm /tmp/bonediagd/$1.pid
-      ./daemon$1.py start
+      rm "/tmp/bonediagd/$1.pid"
+      ./"daemon$1.py start"
     fi
   else
     logger -p user.warn -t bonediagd "Found daemon$1 not running."
-    ./daemon$1.py start
+    ./"daemon$1.py start"
   fi
 }
 
