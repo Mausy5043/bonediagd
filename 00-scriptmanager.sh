@@ -26,6 +26,7 @@ rm *.pyc
  DIFFd14=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon14.py)
  DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
  DIFFd21=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon21.py)
+ DIFFd98=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon98.py)
  DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
 
  git pull
@@ -68,6 +69,10 @@ if [[ -n "$DIFFd21" ]]; then
   logger -p user.notice -t bonediagd "Source daemon21 has changed."
   ./daemon21.py stop
 fi
+if [[ -n "$DIFFd98" ]]; then
+  logger -p user.notice -t bonediagd "Source daemon98 has changed."
+  ./daemon98.py stop
+fi
 if [[ -n "$DIFFd99" ]]; then
   logger -p user.notice -t bonediagd "Source daemon99 has changed."
   ./daemon99.py stop
@@ -82,6 +87,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon14.py stop
   ./daemon15.py stop
   ./daemon21.py stop
+  ./daemon98.py stop
   ./daemon99.py stop
 fi
 
@@ -105,12 +111,12 @@ destale 12
 destale 13
 destale 14
 destale 15
+destale 98
 destale 99
-
-destale 21
 
 case "$CLNT" in
   bbone )   echo "BeagleBone Black"
+            destale 21
             #./testgraph.sh
             ;;
   * )       echo "!! undefined client !!"

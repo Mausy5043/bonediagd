@@ -6,7 +6,7 @@
 
 # Adapted by M.Hendrix [2015]
 
-# daemon99.py creates an XML-file and uploads data to the server.
+# daemon99.py creates an XML-file on the server.
 
 import syslog, traceback
 import os, sys, shutil, glob, platform, time, commands, subprocess
@@ -19,14 +19,6 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    #GPIO.setup("USR0", GPIO.OUT)
-    #GPIO.setup("USR1", GPIO.OUT)
-    #GPIO.setup("USR2", GPIO.OUT)
-    #GPIO.setup("USR3", GPIO.OUT)
-    #GPIO.output("USR0", GPIO.HIGH)
-    #GPIO.output("USR1", GPIO.HIGH)
-    #GPIO.output("USR2", GPIO.HIGH)
-    #GPIO.output("USR3", GPIO.HIGH)
     samples = 1
 
     sampleTime = 60
@@ -36,23 +28,14 @@ class MyDaemon(Daemon):
     mount_path = '/mnt/share1/'
     remote_path = mount_path + myname
     remote_lock = remote_path + '/client.lock'
-    
-    #GPIO.output("USR0", GPIO.LOW)
-    #GPIO.output("USR1", GPIO.LOW)
-    #GPIO.output("USR2", GPIO.LOW)
-    #GPIO.output("USR3", GPIO.LOW)
+
     while True:
       try:
         startTime=time.time()
 
         if os.path.ismount(mount_path):
-          #GPIO.output("USR0", GPIO.HIGH)
-          #print 'dataspool is mounted'
-          #lock(remote_lock)
-          do_mv_data(remote_path)
+          # print 'dataspool is mounted'
           do_xml(remote_path)
-          #unlock(remote_lock)
-          #GPIO.output("USR0", GPIO.LOW)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
@@ -73,53 +56,7 @@ def syslog_trace(trace):
     if len(line):
       syslog.syslog(syslog.LOG_ALERT,line)
 
-def do_mv_data(rpath):
-  hostlock = rpath + '/host.lock'
-  clientlock = rpath + '/client.lock'
-  count_internal_locks=1
-
-  #
-  #rpath='/tmp/test'
-  #
-
-  # wait 3 seconds for processes to finish
-  time.sleep(3)
-
-  while os.path.isfile(hostlock):
-    # wait while the server has locked the directory
-    time.sleep(1)
-
-  # server already sets the client.lock. Do it anyway.
-  lock(clientlock)
-
-  # prevent race conditions
-  while os.path.isfile(hostlock):
-    # wait while the server has locked the directory
-    time.sleep(1)
-
-  while (count_internal_locks > 0):
-    time.sleep(1)
-    count_internal_locks=0
-    for file in glob.glob(r'/tmp/bonediagd/*.lock'):
-      count_internal_locks += 1
-
-  for file in glob.glob(r'/tmp/bonediagd/*.csv'):
-    #print file
-    if os.path.isfile(clientlock):
-      if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
-        shutil.move(file, rpath)
-
-  for file in glob.glob(r'/tmp/bonediagd/*.png'):
-    if os.path.isfile(clientlock):
-      #if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
-      shutil.move(file, rpath)
-
-  unlock(clientlock)
-
-  return
-
 def do_xml(wpath):
-  #
   usr							= commands.getoutput("whoami")
   home            = "/root"
   uname           = os.uname()
