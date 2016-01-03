@@ -9,7 +9,7 @@
 # daemon98.py uploads data to the server.
 
 import syslog, traceback
-import os, sys, shutil, glob, platform, time, commands, subprocess
+import os, sys, shutil, glob, time, commands, subprocess
 from libdaemon import Daemon
 
 DEBUG = False

@@ -9,7 +9,7 @@
 # daemon99.py creates an XML-file on the server.
 
 import syslog, traceback
-import os, sys, shutil, glob, platform, time, commands, subprocess
+import os, sys, platform, time, commands, subprocess
 from libdaemon import Daemon
 
 #import Adafruit_BBIO.GPIO as GPIO
