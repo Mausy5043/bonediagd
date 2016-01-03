@@ -131,7 +131,7 @@ class MyDaemon(Daemon):
         raise
 
 def syslog_trace(trace):
-  '''Log a python stack trace to syslog'''
+  # Log a python stack trace to syslog
   log_lines = trace.split('\n')
   for line in log_lines:
     if len(line):
@@ -151,7 +151,7 @@ def do_report(result,cnsql):
   fresult = ', '.join(map(str, result))
   flock = '/tmp/bonediagd/21.lock'
   lock(flock)
-  f = file('/tmp/TMP36.csv', 'a')
+  f = file('/tmp/bonediagd/TMP36.csvsql', 'a')
   f.write('{0}, {1}\n'.format(outDate, fresult) )
   f.close()
   unlock(flock)
