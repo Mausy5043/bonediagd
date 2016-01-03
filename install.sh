@@ -6,7 +6,6 @@
 # configuration accordingly. Among others, `bonediagd` may be installed
 # using `git clone`. Followed by calling this `install.sh` script
 ME=$(whoami)
-HERE=$(pwd)
 # Installing `bonediagd` requires:
 # 1. Add a cronjob in `/etc/cron.d/` periodically running `00-scriptmanager`
 #    to keep the daemons up-to-date
@@ -18,7 +17,7 @@ date
 # To suppress git detecting changes by chmod:
 git config core.fileMode false
 # set the branch
-echo "master" > $HOME/.bonediagd.branch
+echo "master" > "$HOME/.bonediagd.branch"
 
 if [ ! -d /etc/cron.d ]; then
   echo "Creating /etc/cron.d..."
