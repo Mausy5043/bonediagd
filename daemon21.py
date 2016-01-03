@@ -38,8 +38,6 @@ TMP36_gain = 0.1
 # offset(old)
 TMP36_offset = -50.0
 
-
-
 class MyDaemon(Daemon):
   def run(self):
     try:              # Initialise MySQLdb
@@ -150,13 +148,13 @@ def do_work():
 def do_report(result,cnsql):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  #fresult = ', '.join(map(str, result))
-  #flock = '/tmp/bonediagd/21.lock'
-  #lock(flock)
-  #f = file('/tmp/TMP36.csv', 'a')
-  #f.write('{0}, {1}\n'.format(outDate, fresult) )
-  #f.close()
-  #unlock(flock)
+  fresult = ', '.join(map(str, result))
+  flock = '/tmp/bonediagd/21.lock'
+  lock(flock)
+  f = file('/tmp/TMP36.csv', 'a')
+  f.write('{0}, {1}\n'.format(outDate, fresult) )
+  f.close()
+  unlock(flock)
 
   t_sample=outDate.split(',')
   cursql = cnsql.cursor()
