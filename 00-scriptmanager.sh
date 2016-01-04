@@ -93,7 +93,7 @@ fi
 
 function destale {
   if [ -e "/tmp/bonediagd/$1.pid" ]; then
-    if ! kill -0 $"(cat /tmp/bonediagd/$1.pid)"  > /dev/null 2>&1; then
+    if ! kill -0 $(cat "/tmp/bonediagd/$1.pid")  > /dev/null 2>&1; then
       logger -p user.err -t bonediagd "Stale daemon$1 pid-file found."
       rm "/tmp/bonediagd/$1.pid"
       ./"daemon$1.py" start
