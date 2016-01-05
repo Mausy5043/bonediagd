@@ -24,6 +24,7 @@ rm ./*.pyc
  DIFFd14=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon14.py)
  DIFFd15=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon15.py)
  DIFFd21=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon21.py)
+ DIFFd97=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon97.py)
  DIFFd98=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon98.py)
  DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
 
@@ -67,6 +68,10 @@ if [[ -n "$DIFFd21" ]]; then
   logger -p user.notice -t bonediagd "Source daemon21 has changed."
   ./daemon21.py stop
 fi
+if [[ -n "$DIFFd97" ]]; then
+  logger -p user.notice -t bonediagd "Source daemon97 has changed."
+  ./daemon97.py stop
+fi
 if [[ -n "$DIFFd98" ]]; then
   logger -p user.notice -t bonediagd "Source daemon98 has changed."
   ./daemon98.py stop
@@ -85,6 +90,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon14.py stop
   ./daemon15.py stop
   ./daemon21.py stop
+  ./daemon97.py stop
   ./daemon98.py stop
   ./daemon99.py stop
 fi
@@ -109,6 +115,7 @@ destale 12
 destale 13
 destale 14
 destale 15
+destale 97
 destale 98
 destale 99
 

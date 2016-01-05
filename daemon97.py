@@ -9,7 +9,7 @@
 # daemon97.py pushes data to the MySQL-server.
 
 import syslog, traceback
-import os, sys, shutil, glob, time, commands, subprocess
+import os, sys, shutil, glob, time, subprocess
 from libdaemon import Daemon
 import MySQLdb as mdb
 
@@ -72,6 +72,15 @@ class MyDaemon(Daemon):
 
 def do_sql_data():
   if DEBUG:print("Pushing data to MySQL-server")
+  # wait for lock to be removed
+  # open the data file
+  # open a cursor to the DB
+  # read a line of data
+  # |  add the data tot the DB
+  # repeat for each line
+  # close the DB
+  # close the datafile
+  # rename the datafile from `*.sqlcsv` to `*.csv`
   return
 
 def lock(fname):
