@@ -72,7 +72,14 @@ class MyDaemon(Daemon):
 
 def do_sql_data():
   if DEBUG:print("Pushing data to MySQL-server")
-  # wait for lock to be removed
+  count_internal_locks=1
+  while (count_internal_locks > 0):
+    time.sleep(1)
+    count_internal_locks=0
+    for file in glob.glob(r'/tmp/bonediagd/*.lock'):
+      count_internal_locks += 1
+    if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
+
   # open the data file
   # open a cursor to the DB
   # read a line of data

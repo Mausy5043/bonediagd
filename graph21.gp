@@ -48,5 +48,4 @@ set output "/tmp/bonediagd/plot.png"
 
 # ***** PLOT *****
 plot "/tmp/sql21.csv"    using ($2+utc_offset):4 title "Temperature [degC]"      with lines \
-                  ,""    using ($2+utc_offset):3 title "dT"         with lines axes x1y2 \
-     ,"/tmp/sql21b.csv"  using ($2+utc_offset):3 title "Room temperature [degC]" with lines \
+    ,"/tmp/sql21b.csv"   using ($2+utc_offset):3 title "Room temperature [degC]" with lines \
