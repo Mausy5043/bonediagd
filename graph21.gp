@@ -25,13 +25,13 @@ set xtics rotate by 45 right
 
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]" # Title for Y-axis
-set yrange [17:20]
+set yrange [16:19]
 #set autoscale y
 
 # **************************************************************** Y2-axis *****
-set y2label "Raw values [mV]" # Title for Y2-axis
-set autoscale y2
-set y2tics border         # place ticks on second Y2-axis
+#set y2label "Raw values [mV]" # Title for Y2-axis
+#set autoscale y2
+#set y2tics border         # place ticks on second Y2-axis
 
 # ***************************************************************** Legend *****
 # generate a legend which is placed underneath the plot
