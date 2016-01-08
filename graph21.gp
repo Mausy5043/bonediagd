@@ -25,7 +25,7 @@ set xtics rotate by 45 right
 
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]" # Title for Y-axis
-set yrange [16:19]
+set yrange [15:20]
 #set autoscale y
 
 # **************************************************************** Y2-axis *****
