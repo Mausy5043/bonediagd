@@ -52,14 +52,9 @@ class MyDaemon(Daemon):
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock = iniconf.get(inisection, "lockfile")
 
-    #reportTime =  60
-    #samplesperCycle = 1
-    #samples = 1
-
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
-    #sampleTime = 60
 
     myname = os.uname()[1]
     while True:
@@ -98,14 +93,16 @@ def do_sql_data(flock):
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
 
   time.sleep(5)  # simulate time passing while we do the following:
-  # open the data file
-  # open a cursor to the DB
-  # read a line of data
-  # |  add the data tot the DB
-  # repeat for each line
-  # close the DB
-  # close the datafile
-  # rename the datafile from `*.sqlcsv` to `*.csv`
+  for file in glob.glob(r'/tmp/bonediagd/*.csvsql'):
+    if DEBUG:print file
+    # open the data file
+    # open a cursor to the DB
+    # read a line of data
+    # |  add the data tot the DB
+    # repeat for each line
+    # close the DB
+    # close the datafile
+    # rename the datafile from `*.sqlcsv` to `*.csv`
 
   unlock(flock)
   return
