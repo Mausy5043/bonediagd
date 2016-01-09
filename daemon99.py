@@ -11,6 +11,7 @@
 import syslog, traceback
 import os, sys, platform, time, commands, subprocess
 from libdaemon import Daemon
+import ConfigParser
 
 #import Adafruit_BBIO.GPIO as GPIO
 
@@ -19,10 +20,24 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    samples = 1
+    iniconf = ConfigParser.ConfigParser()
+    inisection = "99"
+    s = iniconf.read('config.ini')
+    if DEBUG: print "config file : ", s
+    if DEBUG: print iniconf.items(inisection)
+    reportTime = iniconf.getint(inisection, "reporttime")
+    cycles = iniconf.getint(inisection, "cycles")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
+    flock = iniconf.get(inisection, "lockfile")
 
-    sampleTime = 60
-    cycleTime = samples * sampleTime
+    #reportTime =  60
+    #samplesperCycle = 1
+    #samples = 1
+
+    samples = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime = samples * sampleTime                # time [s] per cycle
+    #sampleTime = 60
 
     myname = os.uname()[1]
     mount_path = '/mnt/share1/'
@@ -48,13 +63,6 @@ class MyDaemon(Daemon):
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
         raise
-
-def syslog_trace(trace):
-  '''Log a python stack trace to syslog'''
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if len(line):
-      syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_xml(wpath):
   usr							= commands.getoutput("whoami")
@@ -134,6 +142,13 @@ def lock(fname):
 def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
+
+def syslog_trace(trace):
+  # Log a python stack trace to syslog
+  log_lines = trace.split('\n')
+  for line in log_lines:
+    if len(line):
+      syslog.syslog(syslog.LOG_ALERT,line)
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/bonediagd/99.pid')

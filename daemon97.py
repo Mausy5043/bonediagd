@@ -11,6 +11,7 @@
 import syslog, traceback
 import os, sys, shutil, glob, time, subprocess
 from libdaemon import Daemon
+import ConfigParser
 import MySQLdb as mdb
 
 DEBUG = False
@@ -40,17 +41,31 @@ class MyDaemon(Daemon):
       syslog_trace(traceback.format_exc())
       raise
 
-    samples = 1
+    iniconf = ConfigParser.ConfigParser()
+    inisection = "97"
+    s = iniconf.read('config.ini')
+    if DEBUG: print "config file : ", s
+    if DEBUG: print iniconf.items(inisection)
+    reportTime = iniconf.getint(inisection, "reporttime")
+    cycles = iniconf.getint(inisection, "cycles")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
+    flock = iniconf.get(inisection, "lockfile")
 
-    sampleTime = 60
-    cycleTime = samples * sampleTime
+    #reportTime =  60
+    #samplesperCycle = 1
+    #samples = 1
+
+    samples = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime = samples * sampleTime                # time [s] per cycle
+    #sampleTime = 60
 
     myname = os.uname()[1]
     while True:
       try:
         startTime=time.time()
 
-        do_sql_data(remote_path)
+        do_sql_data(flock)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
@@ -70,16 +85,18 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc())
         raise
 
-def do_sql_data():
+def do_sql_data(flock):
   if DEBUG:print("Pushing data to MySQL-server")
-  count_internal_locks=1
-  while (count_internal_locks > 0):
+  lock(flock)
+  count_internal_locks=2
+  while (count_internal_locks > 1):
     time.sleep(1)
     count_internal_locks=0
     for file in glob.glob(r'/tmp/bonediagd/*.lock'):
       count_internal_locks += 1
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
 
+  time.sleep(5)  # simulate time passing while we do the following:
   # open the data file
   # open a cursor to the DB
   # read a line of data
@@ -88,6 +105,8 @@ def do_sql_data():
   # close the DB
   # close the datafile
   # rename the datafile from `*.sqlcsv` to `*.csv`
+
+  unlock(flock)
   return
 
 def lock(fname):

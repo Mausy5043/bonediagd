@@ -11,6 +11,7 @@
 
 import syslog, traceback
 import os, sys, time, math
+import ConfigParser
 import Adafruit_BBIO.ADC  as ADC
 import Adafruit_BBIO.GPIO as GPIO
 import MySQLdb as mdb
@@ -77,11 +78,21 @@ class MyDaemon(Daemon):
       syslog_trace(traceback.format_exc())
       raise
 
+    iniconf = ConfigParser.ConfigParser()
+    inisection = "21"
+    s = iniconf.read('config.ini')
+    if DEBUG: print "config file : ", s
+    if DEBUG: print iniconf.items(inisection)
+    reportTime = iniconf.getint(inisection, "reporttime")
+    cycles = iniconf.getint(inisection, "cycles")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
+    flock = iniconf.get(inisection, "lockfile")
+    fdata = iniconf.get(inisection, "resultfile")
 
     # Initialise parameters
-    reportTime = 60                                 # time [s] between reports
-    cycles = 3                                      # number of cycles to aggregate
-    samplesperCycle = 5                             # total number of samples in each cycle
+    #reportTime = 60                                 # time [s] between reports
+    #cycles = 3                                      # number of cycles to aggregate
+    #samplesperCycle = 5                             # total number of samples in each cycle
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
@@ -110,7 +121,7 @@ class MyDaemon(Daemon):
           somma = map(sum,zip(*data))
           averages = [format(s / len(data), '.2f') for s in somma]
           if DEBUG:print averages
-          do_report(averages, consql)
+          do_report(averages, flock, fdata, consql)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):                          # sync to sampleTime [s]
@@ -145,13 +156,14 @@ def do_work():
   D.append(T)
   return D
 
-def do_report(result,cnsql):
+def do_report(result, flock, fdata, cnsql):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   fresult = ', '.join(map(str, result))
-  flock = '/tmp/bonediagd/21.lock'
+  #flock = '/tmp/bonediagd/21.lock'
   lock(flock)
-  f = file('/tmp/bonediagd/TMP36.csvsql', 'a')
+  #f = file('/tmp/bonediagd/TMP36.csvsql', 'a')
+  f = file(fdata, 'a')
   f.write('{0}, {1}\n'.format(outDate, fresult) )
   f.close()
   unlock(flock)

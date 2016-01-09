@@ -12,15 +12,27 @@
 import syslog, traceback
 import os, sys, time, math
 from libdaemon import Daemon
+import ConfigParser
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    reportTime = 60                                 # time [s] between reports
-    cycles = 3                                      # number of cycles to aggregate
-    samplesperCycle = 5                             # total number of samples in each cycle
+    iniconf = ConfigParser.ConfigParser()
+    inisection = "11"
+    s = iniconf.read('config.ini')
+    if DEBUG: print "config file : ", s
+    if DEBUG: print iniconf.items(inisection)
+    reportTime = iniconf.getint(inisection, "reporttime")
+    cycles = iniconf.getint(inisection, "cycles")
+    samplesperCycle = iniconf.getint(inisection, "samplespercycle")
+    flock = iniconf.get(inisection, "lockfile")
+    fdata = iniconf.get(inisection, "resultfile")
+
+    #reportTime = 60                                 # time [s] between reports
+    #cycles = 3                                      # number of cycles to aggregate
+    #samplesperCycle = 5                             # total number of samples in each cycle
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
@@ -42,7 +54,7 @@ class MyDaemon(Daemon):
           if DEBUG:print data
           averages = sum(data[:]) / len(data)
           if DEBUG:print averages
-          do_report(averages)
+          do_report(averages, flock, fdata)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
@@ -57,7 +69,7 @@ class MyDaemon(Daemon):
         raise
 
 def syslog_trace(trace):
-  '''Log a python stack trace to syslog'''
+  # Log a python stack trace to syslog
   log_lines = trace.split('\n')
   for line in log_lines:
     if len(line):
@@ -80,12 +92,13 @@ def do_work():
 
   return Tcpu
 
-def do_report(result):
+def do_report(result, flock, dfile):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  flock = '/tmp/bonediagd/11.lock'
+  #flock = '/tmp/bonediagd/11.lock'
   lock(flock)
-  f = file('/tmp/bonediagd/11-t-cpu.csv', 'a')
+  #f = file('/tmp/bonediagd/11-t-cpu.csv', 'a')
+  f = file(dfile, 'a')
   f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)
