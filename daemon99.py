@@ -22,7 +22,8 @@ class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "99"
-    s = iniconf.read('config.ini')
+    home = os.path.expanduser('~')
+    s = iniconf.read(home + '/bonediagd/config.ini')
     if DEBUG: print "config file : ", s
     if DEBUG: print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -65,8 +66,8 @@ class MyDaemon(Daemon):
         raise
 
 def do_xml(wpath):
-  usr							= commands.getoutput("whoami")
-  home            = "/root"
+  home						= os.path.expanduser('~')
+  #usr							= commands.getoutput("whoami")
   uname           = os.uname()
 
   Tcpu = "(no T-sensor)"
