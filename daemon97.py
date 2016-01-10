@@ -117,6 +117,7 @@ def do_sql_data(flock, inicnfg, cnsql):
     for fname in glob.glob(r'/tmp/bonediagd/*.lock'):
       count_internal_locks += 1
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
+  #endwhile
 
   for inisect in inicnfg.sections(): # Check each section of the config.ini file
     sqlcmd = []
@@ -136,52 +137,9 @@ def do_sql_data(flock, inicnfg, cnsql):
       ofile = inicnfg.get(inisect,"rawfile")
       if DEBUG:print ofile
       shutil.move(ifile, ofile)
-
-  #   # open the datafile
-  #   if DEBUG:print ifile
-  #   f = file(ifile, 'r')
-  #   try:
-  #
-  #
-  #
-  #
-  #       # open a cursor to the DB
-  #       cursql = cnsql.cursor()
-  #       # read a line of data
-  #       # |  add the data tot the DB
-  #
-  #
-  #       #t_sample=outDate.split(',')
-  #       #cmd = ('INSERT INTO tmp36 '
-  #       #                  '(sample_time, sample_epoch, raw_value, temperature) '
-  #       #                    'VALUES (%s, %s, %s, %s)')
-  #       #dat = (t_sample[0], int(t_sample[1]), result[0], result[1] )
-  #       #cursql.execute(cmd, dat)
-  #       #cnsql.commit()
-  #       #cursql.close()
-  #
-  #       # repeat for each line
-  #       # close the DB
-  #
-  #       # close the datafile
-  #       f.close()
-  #       # rename the datafile from `*.sqlcsv` to `*.csv`
-  #     except Exception as e:
-  #       if DEBUG:
-  #         print("Unexpected error:")
-  #         print e.message
-  #       # attempt to close connection to MySQLdb
-  #       if consql:
-  #         if DEBUG:print("Closing MySQL connection")
-  #         consql.close()
-  #         syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
-  #       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-  #       syslog_trace(traceback.format_exc())
-  #
-  # #endfor
-
+    #endif
+  #endfor
   unlock(flock)
-  return
 
 def lock(fname):
   open(fname, 'a').close()
