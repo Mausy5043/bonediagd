@@ -114,7 +114,7 @@ def do_writesample(cnsql, cmd, sample):
       print("***** Closing cursor")
       cursql.close()
     print(e.__doc__)
-    
+
 def do_sql_data(flock, inicnfg, cnsql):
   if DEBUG:print("Pushing data to MySQL-server")
   # set a lock
@@ -130,7 +130,7 @@ def do_sql_data(flock, inicnfg, cnsql):
 
   #time.sleep(5)  # simulate time passing
 
-  for inisect in iniconf.sections(): # Check each section of the config.ini file
+  for inisect in inicnfg.sections(): # Check each section of the config.ini file
     sqlcmd = []
     try:
       sqlcmd = inicnfg.get(inisect,"sqlcmd")
@@ -147,48 +147,48 @@ def do_sql_data(flock, inicnfg, cnsql):
 
 
 
-    # open the datafile
-    if DEBUG:print ifile
-    f = file(ifile, 'r')
-    try:
-
-
-
-
-        # open a cursor to the DB
-        cursql = cnsql.cursor()
-        # read a line of data
-        # |  add the data tot the DB
-
-
-        #t_sample=outDate.split(',')
-        #cmd = ('INSERT INTO tmp36 '
-        #                  '(sample_time, sample_epoch, raw_value, temperature) '
-        #                    'VALUES (%s, %s, %s, %s)')
-        #dat = (t_sample[0], int(t_sample[1]), result[0], result[1] )
-        #cursql.execute(cmd, dat)
-        #cnsql.commit()
-        #cursql.close()
-
-        # repeat for each line
-        # close the DB
-
-        # close the datafile
-        f.close()
-        # rename the datafile from `*.sqlcsv` to `*.csv`
-      except Exception as e:
-        if DEBUG:
-          print("Unexpected error:")
-          print e.message
-        # attempt to close connection to MySQLdb
-        if consql:
-          if DEBUG:print("Closing MySQL connection")
-          consql.close()
-          syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
-        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-        syslog_trace(traceback.format_exc())
-
-  #endfor
+  #   # open the datafile
+  #   if DEBUG:print ifile
+  #   f = file(ifile, 'r')
+  #   try:
+  #
+  #
+  #
+  #
+  #       # open a cursor to the DB
+  #       cursql = cnsql.cursor()
+  #       # read a line of data
+  #       # |  add the data tot the DB
+  #
+  #
+  #       #t_sample=outDate.split(',')
+  #       #cmd = ('INSERT INTO tmp36 '
+  #       #                  '(sample_time, sample_epoch, raw_value, temperature) '
+  #       #                    'VALUES (%s, %s, %s, %s)')
+  #       #dat = (t_sample[0], int(t_sample[1]), result[0], result[1] )
+  #       #cursql.execute(cmd, dat)
+  #       #cnsql.commit()
+  #       #cursql.close()
+  #
+  #       # repeat for each line
+  #       # close the DB
+  #
+  #       # close the datafile
+  #       f.close()
+  #       # rename the datafile from `*.sqlcsv` to `*.csv`
+  #     except Exception as e:
+  #       if DEBUG:
+  #         print("Unexpected error:")
+  #         print e.message
+  #       # attempt to close connection to MySQLdb
+  #       if consql:
+  #         if DEBUG:print("Closing MySQL connection")
+  #         consql.close()
+  #         syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+  #       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+  #       syslog_trace(traceback.format_exc())
+  #
+  # #endfor
 
   unlock(flock)
   return
