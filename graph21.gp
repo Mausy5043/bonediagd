@@ -2,6 +2,11 @@
 
 # graph of TMP36
 
+
+# ******************************************************* General settings *****
+set datafile separator ';'
+set datafile missing "NaN"   # Ignore missing values
+set grid
 tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
                               # for timezone ourselves.
 
@@ -10,10 +15,8 @@ tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
 fname = "/tmp/sql21.csv"
 stats fname using 2 name "T2" nooutput
 
-# ******************************************************* General settings *****
-set datafile separator ';'
-set datafile missing "NaN"   # Ignore missing values
-set grid
+T2_min = T2_min + utc_offset - 946684800
+T2_max = T2_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
 set title "Test graph -".utc_offset."-"
@@ -24,7 +27,7 @@ set xdata time               # Define that data on X-axis should be interpreted 
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 45 right
-set xrange [T2_min+utc_offset:T2_max+utc_offset]
+set xrange [ T2_min : T2_max ]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]" # Title for Y-axis
@@ -50,5 +53,5 @@ set output "/tmp/bonediagd/plot.png"
 # 4 is calculated temperature
 
 # ***** PLOT *****
-plot fname    using ($2+utc_offset):4 title "Temperature [degC]"      with points pointtype 5\
+plot "/tmp/sql21.csv"    using ($2+utc_offset):4 title "Temperature [degC]"      with points pointtype 5\
     ,"/tmp/sql21b.csv"   using ($2+utc_offset):3 title "Room temperature [degC]" with points pointtype 5\
