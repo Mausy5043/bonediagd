@@ -2,8 +2,13 @@
 
 # graph of TMP36
 
+tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
+                              # for timezone ourselves.
+
 # ************************************************************* Statistics *****
 # stats to be calculated here
+fname = "/tmp/sql21.csv"
+stats fname using 2 name "T2" nooutput
 
 # ******************************************************* General settings *****
 set datafile separator ';'
@@ -13,15 +18,13 @@ set grid
 # ****************************************************************** Title *****
 set title "Test graph -".utc_offset."-"
 
-tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
-                              # for timezone ourselves.
-
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
 set xdata time               # Define that data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
 set xtics rotate by 45 right
+set xrange [T2_min+utc_offset:T2_max+utc_offset]
 
 # ***************************************************************** Y-axis *****
 set ylabel "Temperature [degC]" # Title for Y-axis
@@ -47,5 +50,5 @@ set output "/tmp/bonediagd/plot.png"
 # 4 is calculated temperature
 
 # ***** PLOT *****
-plot "/tmp/sql21.csv"    using ($2+utc_offset):4 title "Temperature [degC]"      with points pointtype 5\
+plot fname    using ($2+utc_offset):4 title "Temperature [degC]"      with points pointtype 5\
     ,"/tmp/sql21b.csv"   using ($2+utc_offset):3 title "Room temperature [degC]" with points pointtype 5\
