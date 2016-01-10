@@ -130,13 +130,14 @@ def do_sql_data(flock, inicnfg, cnsql):
       ifile = inicnfg.get(inisect,"resultfile")
       if DEBUG:print ifile
       data = cat(ifile).splitlines()
-      for entry in range(0, len(data)):
-        if DEBUG:print data[entry]
-        do_writesample(cnsql, sqlcmd, data[entry])
 
-      ofile = inicnfg.get(inisect,"rawfile")
-      if DEBUG:print ofile
-      shutil.move(ifile, ofile)
+      if (len(data) >0):
+        for entry in range(0, len(data)):
+          if DEBUG:print data[entry]
+          do_writesample(cnsql, sqlcmd, data[entry])
+        ofile = inicnfg.get(inisect,"rawfile")
+        if DEBUG:print ofile
+        shutil.move(ifile, ofile)
     #endif
   #endfor
   unlock(flock)
