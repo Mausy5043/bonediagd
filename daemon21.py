@@ -14,7 +14,6 @@ import os, sys, time, math
 import ConfigParser
 import Adafruit_BBIO.ADC  as ADC
 import Adafruit_BBIO.GPIO as GPIO
-import MySQLdb as mdb
 
 # own libraries:
 from libdaemon import Daemon
@@ -41,28 +40,6 @@ TMP36_offset = -50.0
 
 class MyDaemon(Daemon):
   def run(self):
-    try:              # Initialise MySQLdb
-      consql = mdb.connect(host='sql.lan', db='domotica', read_default_file='~/.my.cnf')
-
-      if consql.open: # Hardware initialised succesfully -> get a cursor on the DB.
-        cursql = consql.cursor()
-        cursql.execute("SELECT VERSION()")
-        versql = cursql.fetchone()
-        cursql.close()
-        logtext = "{0} : {1}".format("Attached to MySQL server", versql)
-        syslog.syslog(syslog.LOG_INFO, logtext)
-    except mdb.Error, e:
-      if DEBUG:
-        print("Unexpected MySQL error")
-        print "Error %d: %s" % (e.args[0],e.args[1])
-      if consql:    # attempt to close connection to MySQLdb
-        if DEBUG:print("Closing MySQL connection")
-        consql.close()
-        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
-      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-      syslog_trace(traceback.format_exc())
-      raise
-
     try:      # Initialise hardware
       ADC.setup()
       GPIO.setup("USR0", GPIO.OUT)
@@ -70,10 +47,6 @@ class MyDaemon(Daemon):
       if DEBUG:
         print("Unexpected error:")
         print e.message
-      if consql:    # attempt to close connection to MySQLdb
-        if DEBUG:print("Closing MySQL connection")
-        consql.close()
-        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
       raise
@@ -118,7 +91,7 @@ class MyDaemon(Daemon):
           somma = map(sum,zip(*data))
           averages = [format(s / len(data), '.2f') for s in somma]
           if DEBUG:print averages
-          do_report(averages, flock, fdata, consql)
+          do_report(averages, flock, fdata)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):                          # sync to sampleTime [s]
@@ -129,21 +102,9 @@ class MyDaemon(Daemon):
         if DEBUG:
           print("Unexpected error:")
           print e.message
-        # attempt to close connection to MySQLdb
-        if consql:
-          if DEBUG:print("Closing MySQL connection")
-          consql.close()
-          syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
         raise
-
-def syslog_trace(trace):
-  # Log a python stack trace to syslog
-  log_lines = trace.split('\n')
-  for line in log_lines:
-    if len(line):
-      syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
   D = []
@@ -153,7 +114,7 @@ def do_work():
   D.append(T)
   return D
 
-def do_report(result, flock, fdata, cnsql):
+def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   fresult = ', '.join(map(str, result))
@@ -162,16 +123,6 @@ def do_report(result, flock, fdata, cnsql):
   f.write('{0}, {1}\n'.format(outDate, fresult) )
   f.close()
   unlock(flock)
-
-  t_sample=outDate.split(',')
-  cursql = cnsql.cursor()
-  cmd = ('INSERT INTO tmp36 '
-                    '(sample_time, sample_epoch, raw_value, temperature) '
-                    'VALUES (%s, %s, %s, %s)')
-  dat = (t_sample[0], int(t_sample[1]), result[0], result[1] )
-  cursql.execute(cmd, dat)
-  cnsql.commit()
-  cursql.close()
   return
 
 def lock(fname):
@@ -180,6 +131,13 @@ def lock(fname):
 def unlock(fname):
   if os.path.isfile(fname):
     os.remove(fname)
+
+def syslog_trace(trace):
+  # Log a python stack trace to syslog
+  log_lines = trace.split('\n')
+  for line in log_lines:
+    if len(line):
+      syslog.syslog(syslog.LOG_ALERT,line)
 
 if __name__ == "__main__":
   daemon = MyDaemon('/tmp/bonediagd/21.pid')
