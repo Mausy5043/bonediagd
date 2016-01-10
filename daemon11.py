@@ -103,7 +103,6 @@ def do_report(result, flock, dfile):
   f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)
-  return
 
 def lock(fname):
   open(fname, 'a').close()
