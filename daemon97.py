@@ -90,19 +90,9 @@ def cat(filename):
   return ret
 
 def do_writesample(cnsql, cmd, sample):
-  sample = sample.split(', ')
-  #sample_time = sample[0]
-  #sample_epoch = int(sample[1])
-  #if (sample[2] == "NaN") or (sample[2] == "nan"):
-  #  print "not storing NAN"
-  #else:
-  #  temperature = float(sample[2])
+  dat = (sample.split(', '))
   try:
     cursql = cnsql.cursor()
-    #cmd = ('INSERT INTO temper '
-    #                  '(sample_time, sample_epoch, temperature) '
-    #                  'VALUES (%s, %s, %s)')
-    dat = (sample)
     if DEBUG:print cmd,dat
     cursql.execute(cmd, dat)
     cnsql.commit()
@@ -128,8 +118,6 @@ def do_sql_data(flock, inicnfg, cnsql):
       count_internal_locks += 1
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
 
-  #time.sleep(5)  # simulate time passing
-
   for inisect in inicnfg.sections(): # Check each section of the config.ini file
     sqlcmd = []
     try:
@@ -145,7 +133,9 @@ def do_sql_data(flock, inicnfg, cnsql):
         if DEBUG:print data[entry]
         do_writesample(cnsql, sqlcmd, data[entry])
 
-
+      ofile = inicnfg.get(inisect,"rawfile")
+      if DEBUG:print ofile
+      shutil.move(ifile, ofile)
 
   #   # open the datafile
   #   if DEBUG:print ifile
