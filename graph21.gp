@@ -19,7 +19,7 @@ T2_min = T2_min + utc_offset - 946684800
 T2_max = T2_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
-set title "Test graph -".utc_offset."-"
+set title "Test graph -".tz_offset."-"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
@@ -53,5 +53,5 @@ set output "/tmp/bonediagd/plot.png"
 # 4 is calculated temperature
 
 # ***** PLOT *****
-plot "/tmp/sql21.csv"    using ($2+utc_offset):4 title "Temperature [degC]"      with points pointtype 5\
-    ,"/tmp/sql21b.csv"   using ($2+utc_offset):3 title "Room temperature [degC]" with points pointtype 5\
+plot "/tmp/sql21.csv"  using ($2+utc_offset):4 title "Temperature [degC]"      with points pt 5 ps 0.2\
+    ,"/tmp/sql21b.csv" using ($2+utc_offset):3 title "Room temperature [degC]" with points pt 5 ps 0.1\
