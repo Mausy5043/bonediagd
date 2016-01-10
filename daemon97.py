@@ -61,7 +61,7 @@ class MyDaemon(Daemon):
       try:
         startTime=time.time()
 
-        do_sql_data(flock)
+        do_sql_data(flock, iniconf, consql)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
@@ -81,28 +81,114 @@ class MyDaemon(Daemon):
         syslog_trace(traceback.format_exc())
         raise
 
-def do_sql_data(flock):
+def cat(filename):
+  ret = ""
+  if os.path.isfile(filename):
+    f = file(filename,'r')
+    ret = f.read().strip('\n')
+    f.close()
+  return ret
+
+def do_writesample(cnsql, cmd, sample):
+  sample = sample.split(', ')
+  #sample_time = sample[0]
+  #sample_epoch = int(sample[1])
+  #if (sample[2] == "NaN") or (sample[2] == "nan"):
+  #  print "not storing NAN"
+  #else:
+  #  temperature = float(sample[2])
+  try:
+    cursql = cnsql.cursor()
+    #cmd = ('INSERT INTO temper '
+    #                  '(sample_time, sample_epoch, temperature) '
+    #                  'VALUES (%s, %s, %s)')
+    dat = (sample)
+    if DEBUG:print cmd,dat
+    cursql.execute(cmd, dat)
+    cnsql.commit()
+    cursql.close()
+  except mdb.Error, e:
+    print("*** MySQL error")
+    print "**** Error %d: %s" % (e.args[0],e.args[1])
+    if cursql:    # attempt to close connection to MySQLdb
+      print("***** Closing cursor")
+      cursql.close()
+    print(e.__doc__)
+    
+def do_sql_data(flock, inicnfg, cnsql):
   if DEBUG:print("Pushing data to MySQL-server")
+  # set a lock
   lock(flock)
+  # wait for all other processes to release their locks.
   count_internal_locks=2
   while (count_internal_locks > 1):
     time.sleep(1)
     count_internal_locks=0
-    for file in glob.glob(r'/tmp/bonediagd/*.lock'):
+    for fname in glob.glob(r'/tmp/bonediagd/*.lock'):
       count_internal_locks += 1
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
 
-  time.sleep(5)  # simulate time passing while we do the following:
-  for file in glob.glob(r'/tmp/bonediagd/*.csvsql'):
-    if DEBUG:print file
-    # open the data file
-    # open a cursor to the DB
-    # read a line of data
-    # |  add the data tot the DB
-    # repeat for each line
-    # close the DB
-    # close the datafile
-    # rename the datafile from `*.sqlcsv` to `*.csv`
+  #time.sleep(5)  # simulate time passing
+
+  for inisect in iniconf.sections(): # Check each section of the config.ini file
+    sqlcmd = []
+    try:
+      sqlcmd = inicnfg.get(inisect,"sqlcmd")
+    except:
+      if DEBUG:print "No SQL command defined for section", inisect
+
+    if (sqlcmd != []):
+      ifile = inicnfg.get(inisect,"resultfile")
+      if DEBUG:print ifile
+      data = cat(ifile).splitlines()
+      for entry in range(0, len(data)):
+        if DEBUG:print data[entry]
+        do_writesample(cnsql, sqlcmd, data[entry])
+
+
+
+    # open the datafile
+    if DEBUG:print ifile
+    f = file(ifile, 'r')
+    try:
+
+
+
+
+        # open a cursor to the DB
+        cursql = cnsql.cursor()
+        # read a line of data
+        # |  add the data tot the DB
+
+
+        #t_sample=outDate.split(',')
+        #cmd = ('INSERT INTO tmp36 '
+        #                  '(sample_time, sample_epoch, raw_value, temperature) '
+        #                    'VALUES (%s, %s, %s, %s)')
+        #dat = (t_sample[0], int(t_sample[1]), result[0], result[1] )
+        #cursql.execute(cmd, dat)
+        #cnsql.commit()
+        #cursql.close()
+
+        # repeat for each line
+        # close the DB
+
+        # close the datafile
+        f.close()
+        # rename the datafile from `*.sqlcsv` to `*.csv`
+      except Exception as e:
+        if DEBUG:
+          print("Unexpected error:")
+          print e.message
+        # attempt to close connection to MySQLdb
+        if consql:
+          if DEBUG:print("Closing MySQL connection")
+          consql.close()
+          syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+        syslog_trace(traceback.format_exc())
+
+  #endfor
 
   unlock(flock)
   return
