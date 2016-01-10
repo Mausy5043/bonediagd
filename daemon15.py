@@ -33,13 +33,6 @@ class MyDaemon(Daemon):
     flock = iniconf.get(inisection, "lockfile")
     fdata = iniconf.get(inisection, "resultfile")
 
-    #if IS_SYSTEMD:
-    #  reportTime = 180
-    #else:
-    #  reportTime = 60
-    #reportTime = 60                                 # time [s] between reports
-    #cycles = 1                                      # number of cycles to aggregate
-    #samplesperCycle = 1                             # total number of samples in each cycle
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
@@ -108,11 +101,8 @@ def do_work():
 def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-
   result = ', '.join(map(str, result))
-  #flock = '/tmp/bonediagd/15.lock'
   lock(flock)
-  #f = file('/tmp/bonediagd/15-cnt-loglines.csv', 'a')
   f = file(fdata, 'a')
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()

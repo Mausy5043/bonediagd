@@ -31,9 +31,6 @@ class MyDaemon(Daemon):
     flock = iniconf.get(inisection, "lockfile")
     fdata = iniconf.get(inisection, "resultfile")
 
-    #reportTime = 60                                 # time [s] between reports
-    #cycles = 3                                      # number of cycles to aggregate
-    #samplesperCycle = 5                             # total number of samples in each cycle
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle

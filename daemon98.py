@@ -29,14 +29,9 @@ class MyDaemon(Daemon):
     samplesperCycle = iniconf.getint(inisection, "samplespercycle")
     flock = iniconf.get(inisection, "lockfile")
 
-    #reportTime =  60
-    #samplesperCycle = 1
-    #samples = 1
-
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
-    #sampleTime = 60
 
     myname = os.uname()[1]
     mount_path = '/mnt/share1/'
@@ -47,7 +42,6 @@ class MyDaemon(Daemon):
         startTime=time.time()
 
         if os.path.ismount(mount_path):
-          #print 'dataspool is mounted'
           do_mv_data(remote_path)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
