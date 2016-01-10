@@ -31,10 +31,10 @@ class MyDaemon(Daemon):
         syslog.syslog(syslog.LOG_INFO, logtext)
     except mdb.Error, e:
       if DEBUG:
-        print("Unexpected MySQL error")
+        print "Unexpected MySQL error"
         print "Error %d: %s" % (e.args[0],e.args[1])
       if consql:    # attempt to close connection to MySQLdb
-        if DEBUG:print("Closing MySQL connection")
+        if DEBUG:print "Closing MySQL connection"
         consql.close()
         syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
@@ -70,11 +70,11 @@ class MyDaemon(Daemon):
 
       except Exception as e:
         if DEBUG:
-          print("Unexpected error:")
+          print "Unexpected error:"
           print e.message
         # attempt to close connection to MySQLdb
         if consql:
-          if DEBUG:print("Closing MySQL connection")
+          if DEBUG:print "Closing MySQL connection"
           consql.close()
           syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
@@ -98,15 +98,15 @@ def do_writesample(cnsql, cmd, sample):
     cnsql.commit()
     cursql.close()
   except mdb.Error, e:
-    print("*** MySQL error")
+    print "*** MySQL error"
     print "**** Error %d: %s" % (e.args[0],e.args[1])
     if cursql:    # attempt to close connection to MySQLdb
-      print("***** Closing cursor")
+      print "***** Closing cursor"
       cursql.close()
     print(e.__doc__)
 
 def do_sql_data(flock, inicnfg, cnsql):
-  if DEBUG:print("Pushing data to MySQL-server")
+  if DEBUG:print "Pushing data to MySQL-server"
   # set a lock
   lock(flock)
   # wait for all other processes to release their locks.

@@ -45,7 +45,7 @@ class MyDaemon(Daemon):
       GPIO.setup("USR0", GPIO.OUT)
     except Exception as e:
       if DEBUG:
-        print("Unexpected error:")
+        print "Unexpected error:"
         print e.message
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
@@ -100,7 +100,7 @@ class MyDaemon(Daemon):
           time.sleep(waitTime)
       except Exception as e:
         if DEBUG:
-          print("Unexpected error:")
+          print "Unexpected error:"
           print e.message
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
