@@ -145,7 +145,7 @@ def do_sql_data(flock, inicnfg, cnsql):
       ofile = inicnfg.get(inisect,"rawfile")
       if DEBUG:print ofile
       if os.path.isfile(ifile): # resultfile exists
-        if not os.path.isfile(ifile): # rawfile does not exist
+        if not os.path.isfile(ofile): # rawfile does not exist
           shutil.move(ifile, ofile)
     except:
       if DEBUG:print "No rawfile defined for section", inisect
