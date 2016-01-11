@@ -118,6 +118,8 @@ def do_sql_data(flock, inicnfg, cnsql):
       count_internal_locks += 1
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
   #endwhile
+  ifile = inicnfg.get(inisect,"resultfile")
+  if DEBUG:print ifile
 
   for inisect in inicnfg.sections(): # Check each section of the config.ini file
     sqlcmd = []
@@ -127,11 +129,9 @@ def do_sql_data(flock, inicnfg, cnsql):
       if DEBUG:print "No SQL command defined for section", inisect
 
     if (sqlcmd != []):
-      ifile = inicnfg.get(inisect,"resultfile")
-      if DEBUG:print ifile
       data = cat(ifile).splitlines()
 
-      if (len(data) >0):
+      if (len(data) > 0):
         for entry in range(0, len(data)):
           if DEBUG:print data[entry]
           do_writesample(cnsql, sqlcmd, data[entry])

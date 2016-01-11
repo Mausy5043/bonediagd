@@ -10,9 +10,8 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math
+import os, sys, time, math, ConfigParser
 from libdaemon import Daemon
-import ConfigParser
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
