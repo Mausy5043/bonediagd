@@ -120,8 +120,11 @@ def do_sql_data(flock, inicnfg, cnsql):
   #endwhile
 
   for inisect in inicnfg.sections(): # Check each section of the config.ini file
-    ifile = inicnfg.get(inisect,"resultfile")
-    if DEBUG:print ifile
+    try:
+      ifile = inicnfg.get(inisect,"resultfile")
+      if DEBUG:print ifile
+    except:
+      if DEBUG:print "No resultfile for section", inisect
     sqlcmd = []
     try:
       sqlcmd = inicnfg.get(inisect,"sqlcmd")
