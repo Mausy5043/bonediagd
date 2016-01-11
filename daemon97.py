@@ -135,10 +135,16 @@ def do_sql_data(flock, inicnfg, cnsql):
         for entry in range(0, len(data)):
           if DEBUG:print data[entry]
           do_writesample(cnsql, sqlcmd, data[entry])
-        ofile = inicnfg.get(inisect,"rawfile")
-        if DEBUG:print ofile
-        shutil.move(ifile, ofile)
+        #endfor
+      #endif
     #endif
+    try:
+      ofile = inicnfg.get(inisect,"rawfile")
+      if DEBUG:print ofile
+      if os.path.isfile(ifile):
+        shutil.move(ifile, ofile)
+    except:
+      if DEBUG:print "No rawfile defined for section", inisect
   #endfor
   unlock(flock)
 
