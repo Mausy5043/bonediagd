@@ -118,10 +118,10 @@ def do_sql_data(flock, inicnfg, cnsql):
       count_internal_locks += 1
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
   #endwhile
-  ifile = inicnfg.get(inisect,"resultfile")
-  if DEBUG:print ifile
 
   for inisect in inicnfg.sections(): # Check each section of the config.ini file
+    ifile = inicnfg.get(inisect,"resultfile")
+    if DEBUG:print ifile
     sqlcmd = []
     try:
       sqlcmd = inicnfg.get(inisect,"sqlcmd")
@@ -141,8 +141,9 @@ def do_sql_data(flock, inicnfg, cnsql):
     try:
       ofile = inicnfg.get(inisect,"rawfile")
       if DEBUG:print ofile
-      if os.path.isfile(ifile):
-        shutil.move(ifile, ofile)
+      if os.path.isfile(ifile): # resultfile exists
+        if not os.path.isfile(ifile): # rawfile does not exist
+          shutil.move(ifile, ofile)
     except:
       if DEBUG:print "No rawfile defined for section", inisect
   #endfor
