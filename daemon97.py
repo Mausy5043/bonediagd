@@ -133,7 +133,6 @@ def do_sql_data(flock, inicnfg, cnsql):
 
     if (sqlcmd != []):
       data = cat(ifile).splitlines()
-
       if (len(data) > 0):
         for entry in range(0, len(data)):
           if DEBUG:print data[entry]
@@ -144,9 +143,9 @@ def do_sql_data(flock, inicnfg, cnsql):
     try:
       ofile = inicnfg.get(inisect,"rawfile")
       if DEBUG:print ofile
-      if os.path.isfile(ifile): # resultfile exists
+      if os.path.isfile(ifile):       # resultfile exists
         if not os.path.isfile(ofile): # rawfile does not exist
-          shutil.move(ifile, ofile)
+          shutil.move(ifile, ofile)   # then move the file over
     except:
       if DEBUG:print "No rawfile defined for section", inisect
   #endfor
