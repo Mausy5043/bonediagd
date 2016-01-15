@@ -13,8 +13,6 @@ import os, sys, platform, time, commands, subprocess
 from libdaemon import Daemon
 import ConfigParser
 
-#import Adafruit_BBIO.GPIO as GPIO
-
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 

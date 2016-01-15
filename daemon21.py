@@ -13,7 +13,6 @@ import syslog, traceback
 import os, sys, time, math
 import ConfigParser
 import Adafruit_BBIO.ADC  as ADC
-import Adafruit_BBIO.GPIO as GPIO
 
 # own libraries:
 from libdaemon import Daemon
@@ -42,7 +41,6 @@ class MyDaemon(Daemon):
   def run(self):
     try:      # Initialise hardware
       ADC.setup()
-      GPIO.setup("USR0", GPIO.OUT)
     except Exception as e:
       if DEBUG:
         print "Unexpected error:"
@@ -73,8 +71,6 @@ class MyDaemon(Daemon):
       try:
         startTime = time.time()
 
-        GPIO.output("USR0", GPIO.HIGH)
-
         # **** Get sample value
         result = do_work()
         if DEBUG:print result
@@ -96,7 +92,6 @@ class MyDaemon(Daemon):
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):                          # sync to sampleTime [s]
           if DEBUG:print "Waiting {0} s".format(waitTime)
-          GPIO.output("USR0", GPIO.LOW)
           time.sleep(waitTime)
       except Exception as e:
         if DEBUG:
