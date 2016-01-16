@@ -9,7 +9,7 @@ branch=$(cat "$HOME/.bonediagd.branch")
 pushd "$HOME/bonediagd"
 
 # force recompilation of libraries
-rm ./*.pyc
+#rm ./*.pyc
 # Synchronise local copy with $branch
 
  git fetch origin

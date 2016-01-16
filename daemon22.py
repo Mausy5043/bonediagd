@@ -48,16 +48,6 @@ DHT22H_offset = 0.0
 
 class MyDaemon(Daemon):
   def run(self):
-    try:      # Initialise hardware
-      ADC.setup()
-    except Exception as e:
-      if DEBUG:
-        print "Unexpected error:"
-        print e.message
-      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-      syslog_trace(traceback.format_exc())
-      raise
-
     iniconf = ConfigParser.ConfigParser()
     inisection = "22"
     home = os.path.expanduser('~')
