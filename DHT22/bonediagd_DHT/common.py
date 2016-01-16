@@ -21,7 +21,8 @@
 # SOFTWARE.
 import time
 
-import platform_detect
+#import platform_detect
+import Beaglebone_Black
 
 # Define error constants.
 DHT_SUCCESS        =  0
@@ -38,16 +39,17 @@ AM2302 = 22
 SENSORS = [DHT11, DHT22, AM2302]
 
 
-def get_platform():
-  """Return a DHT platform interface for the currently detected platform."""
-  plat = platform_detect.platform_detect()
-  if plat == platform_detect.BEAGLEBONE_BLACK:
-    import Beaglebone_Black
-    return Beaglebone_Black
-  else:
-    raise RuntimeError('Unknown platform.')
+#def get_platform():
+#  """Return a DHT platform interface for the currently detected platform."""
+#  plat = platform_detect.platform_detect()
+#  if plat == platform_detect.BEAGLEBONE_BLACK:
+#    import Beaglebone_Black
+#    return Beaglebone_Black
+#  else:
+#    raise RuntimeError('Unknown platform.')
 
-def read(sensor, pin, platform=None):
+#def read(sensor, pin, platform=None):
+def read(sensor, pin):
   """Read DHT sensor of specified sensor type (DHT11, DHT22, or AM2302) on
   specified pin and return a tuple of humidity (as a floating point value
   in percent) and temperature (as a floating point value in Celsius). Note that
@@ -61,9 +63,10 @@ def read(sensor, pin, platform=None):
   """
   if sensor not in SENSORS:
     raise ValueError('Expected DHT11, DHT22, or AM2302 sensor value.')
-  if platform is None:
-    platform = get_platform()
-  return platform.read(sensor, pin)
+  #if platform is None:
+  #  platform = get_platform()
+  #return platform.read(sensor, pin)
+  return Beaglebone_Black.read(sensor, pin)
 
 def read_retry(sensor, pin, retries=15, delay_seconds=2, platform=None):
   """Read DHT sensor of specified sensor type (DHT11, DHT22, or AM2302) on
