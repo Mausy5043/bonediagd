@@ -29,7 +29,7 @@ rm ./*.pyc
  DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
  DIFFDHT=$(git --no-pager diff --name-only "$branch..origin/$branch" |grep "DHT22" | wc -l)
  echo "***"
- echo "$DIFFDHT"
+ echo "DHT22 changes: $DIFFDHT"
  echo "***"
  git pull
  git fetch origin

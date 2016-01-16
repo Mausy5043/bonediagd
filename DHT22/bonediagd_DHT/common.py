@@ -79,7 +79,8 @@ def read_retry(sensor, pin, retries=15, delay_seconds=2, platform=None):
   seconds, but can be overridden.
   """
   for i in range(retries):
-    humidity, temperature = read(sensor, pin, platform)
+    #humidity, temperature = read(sensor, pin, platform)
+    humidity, temperature = read(sensor, pin)
     if humidity is not None and temperature is not None:
       return (humidity, temperature)
     time.sleep(delay_seconds)
