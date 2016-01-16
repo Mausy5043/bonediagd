@@ -9,6 +9,11 @@
 # daemon21.py measures the TMP36 temperature.
 # uses moving averages
 
+# Wiring (facing flat side of TMP36GZ, left to right):
+# PWR              = P9_4  - VDD_3V3
+# data (0..1800mV) = P9_35 - AIN6
+# GND              = P9_34 - ADC_GND
+
 import syslog, traceback
 import os, sys, time, math
 import ConfigParser
