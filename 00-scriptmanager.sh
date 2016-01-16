@@ -45,6 +45,16 @@ if [[ ! -d /tmp/bonediagd ]]; then
   mkdir /tmp/bonediagd
 fi
 
+######## Install new libraries #######
+if [ $DHT22 -ne 0 ]; then
+  pushd DHT22
+  python setup.py install
+  echo ""
+  examples/simpletest.py
+  echo ""
+  popd
+fi
+
 ######## Stop daemons ######
 
 if [[ -n "$DIFFd11" ]]; then
