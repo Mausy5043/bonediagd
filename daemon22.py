@@ -74,8 +74,9 @@ class MyDaemon(Daemon):
         result = do_work()
         if DEBUG:print result
         # **** Store sample value
-        data.append(map(float,result))              # add a sample at the end
-        if (len(data) > samples):data.pop(0)        # remove oldest sample from the start
+        if result:
+          data.append(map(float,result))              # add a sample at the end
+          if (len(data) > samples):data.pop(0)        # remove oldest sample from the start
 
         # report sample average
         if (startTime % reportTime < sampleTime):   # sync reports to reportTime
