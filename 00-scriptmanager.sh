@@ -27,10 +27,8 @@ rm ./*.pyc
  DIFFd97=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon97.py)
  DIFFd98=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon98.py)
  DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
- DIFFDHT=$(git --no-pager diff --name-only "$branch..origin/$branch" |grep "DHT22" | wc -l)
- echo "***"
- echo "DHT22 changes: $DIFFDHT"
- echo "***"
+ DIFFDHT=$(git --no-pager diff --name-only "$branch..origin/$branch" |grep -c "DHT22")
+
  git pull
  git fetch origin
  git checkout "$branch"
@@ -46,7 +44,10 @@ if [[ ! -d /tmp/bonediagd ]]; then
 fi
 
 ######## Install new libraries #######
-if [ $DHT22 -ne 0 ]; then
+echo "***"
+echo "DHT22 changes: $DIFFDHT"
+echo "***"
+if [[ $DIFFDHT -ne 0 ]]; then
   pushd DHT22
   python setup.py install
   echo ""
