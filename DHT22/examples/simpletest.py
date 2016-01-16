@@ -2,6 +2,7 @@
 
 # Copyright (c) 2014 Adafruit Industries
 # Author: Tony DiCola
+# Modified by Mauy5043 (2016)
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

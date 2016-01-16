@@ -1,5 +1,6 @@
 // Copyright (c) 2014 Adafruit Industries
 // Author: Tony DiCola
+// Modified by Mauy5043 (2016)
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,11 +30,11 @@
   #include "bbb_mmio.h"
 
   int main(int argc, char* argv[]) {
-    // Get GPIO pin.  
-    // See the giant table of of pins in the system reference manual for details 
+    // Get GPIO pin.
+    // See the giant table of of pins in the system reference manual for details
     // on the base and number for a given GPIO:
     //  https://github.com/CircuitCo/BeagleBone-Black/blob/master/BBB_SRM.pdf?raw=true
-    // Section 7 Connectors, table 12 shows P8_11 maps to GPIO1_13, so 1 is the 
+    // Section 7 Connectors, table 12 shows P8_11 maps to GPIO1_13, so 1 is the
     // gpio base and 13 is the gpio number.
     gpio_t p8_11;
     if (bbb_mmio_get_gpio(1, 13, &p8_11) < 0) {
