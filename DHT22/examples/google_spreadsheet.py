@@ -46,8 +46,8 @@ from oauth2client.client import SignedJwtAssertionCredentials
 # Type of sensor, can be bonediagd_DHT.DHT11, bonediagd_DHT.DHT22, or bonediagd_DHT.AM2302.
 DHT_TYPE = bonediagd_DHT.DHT22
 
-# Example of sensor connected to Beaglebone Black pin P8_11
-DHT_PIN  = 'P8_11'
+# Example of sensor connected to Beaglebone Black pin P9_15
+DHT_PIN  = 'P9_15'
 
 # Google Docs OAuth credential JSON file.  Note that the process for authenticating
 # with Google docs has changed as of ~April 2015.  You _must_ use OAuth2 to log
