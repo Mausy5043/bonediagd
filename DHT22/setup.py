@@ -14,7 +14,7 @@ extensions.append(Extension("bonediagd_DHT.BBB_DHT22_driver",
 # Call setuptools setup function to install package.
 # Original code by T. DiCola
 setup(name            = 'bonediagd_DHT',
-    version           = '0.0.3',
+    version           = '0.1.0',
     author            = 'Mausy5043',
     author_email      = '',
     description       = 'Library to get readings from the DHT11, DHT22, and AM2302 humidity and temperature sensors on a Beaglebone Black.',
