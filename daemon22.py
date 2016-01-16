@@ -27,7 +27,7 @@ DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 sensor_type = bonediagd_DHT.DHT22
-sensor_pin  = 'P9_15'
+sensor_pin  = 'P8_11'
 # SENSOR CALIBRATION PROCEDURE
 # Given the existing gain and offset.
 # 1 Determine a linear least-squares fit between the output of this program and
