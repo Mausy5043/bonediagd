@@ -42,6 +42,16 @@ pushd ./DHT22
   echo ""
 popd
 
+echo "Installing 1-wire support..."
+# http://www.bonebrews.com/temperature-monitoring-with-the-ds18b20-on-a-beaglebone-black/
+#wget -c https://raw.githubusercontent.com/RobertCNelson/tools/master/pkgs/dtc.sh
+#./dtc.sh
+#dtc -O dtb -o w1-00A0.dtbo -b 0 -@ w1.dts
+#cp w1-00A0.dtbo /lib/firmware
+#echo w1 > /sys/devices/bone_capemgr.9/slots
+#modprobe w1-gpio
+
+
 ./00-scriptmanager.sh
 
 echo -n "Finished installation of bonediagd on "
