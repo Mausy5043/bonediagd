@@ -1,6 +1,6 @@
 #!/usr/bin/gnuplot
 
-# graph of TMP36
+# graph of various temperature sensors
 
 
 # ******************************************************* General settings *****
@@ -19,7 +19,8 @@ T2_min = T2_min + utc_offset - 946684800
 T2_max = T2_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
-#set title "Test graph -".utc_offset."-"
+set title "Temperature trends"
+#"-".utc_offset."-"
 
 # ***************************************************************** X-axis *****
 set xlabel "Date/Time"       # X-axis label
