@@ -11,7 +11,7 @@
 
 # Wiring (facing frontside of DHT22, left to right):
 # PWR              = P9_4  - VDD_3V3
-# data (digital)   = P8_11 - GPIO_48 & R=4k7 > VDD_3V3
+# data (digital)   = P8_15 - GPIO_47 & R=4k7 > VDD_3V3
 # NC               = not connected
 # GND              = P9_1  - DGND
 
@@ -27,7 +27,7 @@ DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 sensor_type = bonediagd_DHT.DHT22
-sensor_pin  = 'P8_11'
+sensor_pin  = 'P8_15'
 # SENSOR CALIBRATION PROCEDURE
 # Given the existing gain and offset.
 # 1 Determine a linear least-squares fit between the output of this program and
