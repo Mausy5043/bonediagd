@@ -18,7 +18,7 @@ T2_min = T2_min + utc_offset - 946684800
 T2_max = T2_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
-set title "DHT22 measurements"
+set title "BMP183 measurements"
 #"-".utc_offset."-"
 
 # ***************************************************************** X-axis *****
