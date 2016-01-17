@@ -53,5 +53,5 @@ set output "/tmp/bonediagd/plot2.png"
 # 4 is calculated temperature
 
 # ***** PLOT *****
-plot "/tmp/sql22.csv"  using ($2+utc_offset):4 title "Temperature [degC]"      with points pt 5 ps 0.15\
-    ,"/tmp/sql22.csv"  using ($2+utc_offset):3 title "Humidity [%]" axes x1y2  with points pt 5 ps 0.1\
+plot "/tmp/sql22.csv"  using ($2+utc_offset):4 title "Temperature [degC]"      with points pt 5 ps 0.2\
+    ,"/tmp/sql22.csv"  using ($2+utc_offset):3 title "Humidity [%]" axes x1y2  with points pt 5 ps 0.2\
