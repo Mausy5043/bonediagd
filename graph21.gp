@@ -41,16 +41,16 @@ set autoscale y
 
 # ***************************************************************** Legend *****
 # generate a legend which is placed underneath the plot
-set key outside bottom center box title "-=legend=-"
+#set key outside bottom center box title "-=legend=-"
+set key default
+set key box
+set key samplen .2
+set key inside vertical
+set key left top
 
 # ***************************************************************** Output *****
 set terminal png large
 set output "/tmp/bonediagd/plot.png"
-
-# Data columns are:
-# 2 is Unix Epoch time
-# 3 is TMP36 mV
-# 4 is calculated temperature
 
 # ***** PLOT *****
 plot "/tmp/sql21.csv"  using ($2+utc_offset):4 title "TMP36 [degC]"      with dots\

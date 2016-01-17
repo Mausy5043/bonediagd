@@ -47,11 +47,6 @@ set key outside bottom center box title "-=legend=-"
 set terminal png large
 set output "/tmp/bonediagd/plot2.png"
 
-# Data columns are:
-# 2 is Unix Epoch time
-# 3 is TMP36 mV
-# 4 is calculated temperature
-
 # ***** PLOT *****
 plot "/tmp/sql22.csv"  using ($2+utc_offset):4 title "Temperature [degC]"      with points pt 5 ps 0.2\
     ,"/tmp/sql22.csv"  using ($2+utc_offset):3 title "Humidity [%]" axes x1y2  with points pt 5 ps 0.2\
