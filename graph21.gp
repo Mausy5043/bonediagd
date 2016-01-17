@@ -2,7 +2,6 @@
 
 # graph of various temperature sensors
 
-
 # ******************************************************* General settings *****
 set datafile separator ';'
 set datafile missing "NaN"   # Ignore missing values
@@ -31,14 +30,14 @@ set xtics rotate by 45 right
 set xrange [ T2_min : T2_max ]
 
 # ***************************************************************** Y-axis *****
-set ylabel "Temperature [degC]" # Title for Y-axis
+set ylabel "Temperature [degC]"
 #set yrange [10:20]
 set autoscale y
 
 # **************************************************************** Y2-axis *****
-#set y2label "Raw values [mV]" # Title for Y2-axis
+#set y2label "Raw values [mV]"
 #set autoscale y2
-#set y2tics border         # place ticks on second Y2-axis
+#set y2tics border
 
 # ***************************************************************** Legend *****
 # generate a legend which is placed underneath the plot
@@ -54,5 +53,6 @@ set terminal png large
 set output "/tmp/bonediagd/plot.png"
 
 # ***** PLOT *****
-plot "/tmp/sql21.csv"  using ($2+utc_offset):4 title "TMP36 [degC]"      with dots\
-    ,"/tmp/sql22.csv"  using ($2+utc_offset):4 title "DHT22 [degC]"      with dots\
+plot "/tmp/sql21.csv"  using ($2+utc_offset):4 title " TMP36  [degC]"      with points pt 5 ps 0.2\
+    ,"/tmp/sql22.csv"  using ($2+utc_offset):4 title " DHT22  [degC]"      with points pt 5 ps 0.2\
+    ,"/tmp/sql23.csv"  using ($2+utc_offset):4 title " BMP183 [degC]"      with points pt 5 ps 0.2\

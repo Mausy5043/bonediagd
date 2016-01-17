@@ -11,7 +11,7 @@
 
 # Wiring (facing frontside of DHT22, left to right):
 # PWR              = P9_4  - VDD_3V3
-# data (digital)   = P9_15 - GPIO_48 & R=4k7 > VDD_3V3
+# data (digital)   = P8_11 - GPIO_48 & R=4k7 > VDD_3V3
 # NC               = not connected
 # GND              = P9_1  - DGND
 

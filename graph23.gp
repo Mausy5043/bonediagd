@@ -11,7 +11,7 @@ tz_offset = utc_offset / 3600 # GNUplot only works with UTC. Need to compensate
 
 # ************************************************************* Statistics *****
 # stats to be calculated here
-fname = "/tmp/sql22.csv"
+fname = "/tmp/sql23.csv"
 stats fname using 2 name "T2" nooutput
 
 T2_min = T2_min + utc_offset - 946684800
@@ -35,7 +35,7 @@ set ylabel "Temperature [degC]"
 set autoscale y
 
 # **************************************************************** Y2-axis *****
-set y2label "Humidity [%]"
+set y2label "Pressure [mbar]"
 set autoscale y2
 set y2tics border
 
@@ -50,8 +50,8 @@ set key left top
 
 # ***************************************************************** Output *****
 set terminal png large
-set output "/tmp/bonediagd/plot2.png"
+set output "/tmp/bonediagd/plot3.png"
 
 # ***** PLOT *****
-plot "/tmp/sql22.csv"  using ($2+utc_offset):4 title " Temperature [degC]"      with points pt 5 ps 0.2\
-    ,"/tmp/sql22.csv"  using ($2+utc_offset):3 title " Humidity [%]" axes x1y2  with points pt 5 ps 0.2\
+plot "/tmp/sql23.csv"  using ($2+utc_offset):4 title " Temperature [degC]"      with points pt 5 ps 0.2\
+    ,"/tmp/sql23.csv"  using ($2+utc_offset):3 title " Pressure [mbar]" axes x1y2  with points pt 5 ps 0.2\

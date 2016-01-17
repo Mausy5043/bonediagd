@@ -7,6 +7,7 @@
 # Adapted by M.Hendrix [2015,2016]
 
 # daemon97.py pushes data to the MySQL-server.
+# daemon23 support
 
 import syslog, traceback
 import os, sys, shutil, glob, time, subprocess
