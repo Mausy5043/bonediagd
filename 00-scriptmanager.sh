@@ -25,6 +25,7 @@ pushd "$HOME/bonediagd"
  DIFFd15=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon15.py)
  DIFFd21=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon21.py)
  DIFFd22=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon22.py)
+ DIFFd23=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon23.py)
  DIFFd97=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon97.py)
  DIFFd98=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon98.py)
  DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
@@ -87,6 +88,10 @@ if [[ -n "$DIFFd22" ]]; then
   logger -p user.notice -t bonediagd "Source daemon22 has changed."
   ./daemon22.py stop
 fi
+if [[ -n "$DIFFd23" ]]; then
+  logger -p user.notice -t bonediagd "Source daemon23 has changed."
+  ./daemon23.py stop
+fi
 if [[ -n "$DIFFd97" ]]; then
   logger -p user.notice -t bonediagd "Source daemon97 has changed."
   ./daemon97.py stop
@@ -110,6 +115,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon15.py stop
   ./daemon21.py stop
   ./daemon22.py stop
+  ./daemon23.py stop
   ./daemon97.py stop
   ./daemon98.py stop
   ./daemon99.py stop
@@ -143,6 +149,7 @@ case "$CLNT" in
   bbone )   echo "BeagleBone Black"
             destale 21
             destale 22
+            destale 23
             #./testgraph.sh
             ;;
   * )       echo "!! undefined client !!"
