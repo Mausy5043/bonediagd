@@ -34,6 +34,14 @@ if [ ! -e /mnt/share1 ]; then
   mkdir /mnt/share1
 fi
 
+echo "Installing DHT22 support..."
+pushd ./DHT22
+  python setup.py install
+  echo ""
+  examples/simpletest.py
+  echo ""
+popd
+
 ./00-scriptmanager.sh
 
 echo -n "Finished installation of bonediagd on "

@@ -8,9 +8,9 @@ CLNT=$(hostname)
 branch=$(cat "$HOME/.bonediagd.branch")
 pushd "$HOME/bonediagd"
 
-# force recompilation of libraries
-#rm ./*.pyc
-# Synchronise local copy with $branch
+ # force recompilation of libraries
+ #rm ./*.pyc
+ # Synchronise local copy with $branch
 
  git fetch origin
  # Check which code has changed
