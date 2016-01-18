@@ -44,12 +44,14 @@ popd
 
 echo "Installing 1-wire support..."
 # http://www.bonebrews.com/temperature-monitoring-with-the-ds18b20-on-a-beaglebone-black/
+#pushd /tmp
 #wget -c https://raw.githubusercontent.com/RobertCNelson/tools/master/pkgs/dtc.sh
+#chmod +x dtc.sh
 #./dtc.sh
-#dtc -O dtb -o w1-00A0.dtbo -b 0 -@ w1.dts
-#cp w1-00A0.dtbo /lib/firmware
+#popd
+#/usr/local/bin/dtc -O dtb -o /lib/firmware/w1-00A0.dtbo -b 0 -@ w1.dts
 #echo w1 > /sys/devices/bone_capemgr.9/slots
-#modprobe w1-gpio
+#la  /sys/devices/w1_bus_master1 
 
 
 ./00-scriptmanager.sh
