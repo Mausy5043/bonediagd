@@ -3,6 +3,7 @@
 # graph of various temperature sensors
 
 # ******************************************************* General settings *****
+set terminal png font "Helvetica"
 set datafile separator ';'
 set datafile missing "NaN"   # Ignore missing values
 set grid
@@ -49,7 +50,6 @@ set key inside vertical
 set key left top
 
 # ***************************************************************** Output *****
-set terminal png large
 set output "/tmp/bonediagd/plot.png"
 
 # ***** PLOT *****
