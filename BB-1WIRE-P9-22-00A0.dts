@@ -1,0 +1,38 @@
+/*
+ * http://interactingobjects.com/ds18b20-temperature-sensor-on-a-beaglebone-black-running-ubuntu/
+ */
+
+/dts-v1/;
+/plugin/;
+/{
+    compatible = "ti,beaglebone", "ti,beaglebone-black";
+    part-number = "BB-W1";
+    version = "00A0";
+
+    /* state the resources this cape uses */
+    exclusive-use =
+    "P9.22",   /* the pin header uses */
+    "gpio0_2"; /* the hardware IP uses */
+
+    fragment@0 {
+        target = &lt;&amp;am33xx_pinmux&gt;;
+        __overlay__ {
+            dallas_w1_pins: pinmux_dallas_w1_pins {
+                pinctrl-single,pins = &lt; 0x150 0x37 &gt;;
+            };
+        };
+    };
+
+    fragment@1 {
+        target = &lt;&amp;ocp&gt;;
+        __overlay__ {
+            onewire@0 {
+                compatible = "w1-gpio";
+                pinctrl-names = "default";
+                pinctrl-0 = &lt;&amp;dallas_w1_pins&gt;;
+                status = "okay";
+                gpios = &lt;&amp;gpio1 2 0&gt;;
+            };
+        };
+    };
+};
