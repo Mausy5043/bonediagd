@@ -3,6 +3,8 @@
  * http://kilobaser.com/blog/2014-07-28-beaglebone-black-devicetreeoverlay-generator
  */
 
+/* not working */
+
 /dts-v1/;
 /plugin/;
 

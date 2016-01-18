@@ -1,4 +1,4 @@
-/* 
+/*
 * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
 *
 * This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 /plugin/;
 
 / {
-       compatible = "ti,beaglebone";
+       compatible = "ti,beaglebone","ti,beaglebone-black;
        part-number = "BB-BONE-W1";
        version = "00A0";
 
