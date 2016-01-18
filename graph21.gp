@@ -3,7 +3,7 @@
 # graph of various temperature sensors
 
 # ******************************************************* General settings *****
-set terminal png font "Helvetica"
+set terminal png font "Helvetica" 11
 set datafile separator ';'
 set datafile missing "NaN"   # Ignore missing values
 set grid
@@ -27,7 +27,7 @@ set xlabel "Date/Time"       # X-axis label
 set xdata time               # Define that data on X-axis should be interpreted as time
 set timefmt "%s"             # Time in log-file is given in Unix format
 set format x "%R"            # Display time in 24 hour notation on the X axis
-set xtics rotate by 45 right
+set xtics rotate by 40 right
 set xrange [ T2_min : T2_max ]
 
 # ***************************************************************** Y-axis *****
