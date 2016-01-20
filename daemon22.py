@@ -40,8 +40,8 @@ sensor_pin  = 'P8_15'
 #   found for gain(new) and offset(new)
 
 # gain(old)
-DHT22T_gain = 1
-DHT22H_gain = 1
+DHT22T_gain = 1.0
+DHT22H_gain = 1.0
 # offset(old)
 DHT22T_offset = 0.0
 DHT22H_offset = 0.0

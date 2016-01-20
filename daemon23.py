@@ -48,10 +48,10 @@ bmp = BMP183(SPI0)
 #   found for gain(new) and offset(new)
 
 # gain(old)
-BMP183T_gain = 1
-BMP183P_gain = 1
+BMP183T_gain = 1.0
+BMP183P_gain = 1.0
 # offset(old)
-BMP183T_offset = 0.0
+BMP183T_offset = 0.6
 BMP183P_offset = 0.0
 
 class MyDaemon(Daemon):
