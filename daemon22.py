@@ -43,7 +43,7 @@ sensor_pin  = 'P8_15'
 DHT22T_gain = 1.0
 DHT22H_gain = 1.0
 # offset(old)
-DHT22T_offset = 0.0
+DHT22T_offset = -0.55
 DHT22H_offset = 0.0
 
 class MyDaemon(Daemon):
