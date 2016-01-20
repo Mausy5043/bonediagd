@@ -1,14 +1,13 @@
 # MySQL script
-# create table for BMP183 readings
+# create table for DS18B20 readings
 
 USE domotica;
 
-DROP TABLE IF EXISTS bmp183;
+DROP TABLE IF EXISTS ds18;
 
-CREATE TABLE `bmp183` (
+CREATE TABLE `ds18` (
   `sample_time`  datetime,
   `sample_epoch` int(11) unsigned,
-  `pressure`    decimal(6,2),
   `temperature`  decimal(5,2),
   PRIMARY KEY (`sample_time`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
