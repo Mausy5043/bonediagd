@@ -120,7 +120,7 @@ def do_work():
   if T0 is not None:
     T = T0 * DS18B20_gain + DS18B20_offset
     D.append(T)
-    if DEBUG:print '  T0 = {0:0.1f}*C        P = {1:0.1f}degC'.format(T0, T)
+    if DEBUG:print '  T0 = {0:0.1f}*C        T = {1:0.1f}degC'.format(T0, T)
   return D
 
 def do_report(result, flock, fdata):
