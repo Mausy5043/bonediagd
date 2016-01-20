@@ -43,16 +43,17 @@ pushd ./DHT22
 popd
 
 echo "Installing 1-wire support..."
-# http://www.bonebrews.com/temperature-monitoring-with-the-ds18b20-on-a-beaglebone-black/
-#pushd /tmp
-#wget -c https://raw.githubusercontent.com/RobertCNelson/tools/master/pkgs/dtc.sh
-#chmod +x dtc.sh
-#./dtc.sh
-#popd
-#/usr/local/bin/dtc -O dtb -o /lib/firmware/w1-00A0.dtbo -b 0 -@ w1.dts
-#echo w1 > /sys/devices/bone_capemgr.9/slots
-#la  /sys/devices/w1_bus_master1 
-
+# source: http://www.bonebrews.com/temperature-monitoring-with-the-ds18b20-on-a-beaglebone-black/
+pushd /tmp
+wget -c https://raw.githubusercontent.com/RobertCNelson/tools/master/pkgs/dtc.sh
+chmod +x dtc.sh
+./dtc.sh
+popd
+/usr/local/bin/dtc -O dtb -o /lib/firmware/nocape-w1-00A0.dtbo -b 0 -@ nocape-w1.dts
+echo nocape-w1 > /sys/devices/bone_capemgr.9/slots
+cat /sys/devices/bone_capemgr.9/slots
+#la  /sys/devices/w1_bus_master1
+cat /sys/bus/w1/devices/28-*/w1_slave
 
 ./00-scriptmanager.sh
 
