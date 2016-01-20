@@ -43,7 +43,7 @@ sensor_pin  = 'P8_15'
 DHT22T_gain = 1.0
 DHT22H_gain = 1.0
 # offset(old)
-DHT22T_offset = -0.55
+DHT22T_offset = -0.8
 DHT22H_offset = 0.0
 
 class MyDaemon(Daemon):
@@ -113,7 +113,7 @@ def do_work():
   # If this happens try again!
   if H0 is not None and T0 is not None:
     H = H0 * DHT22H_gain + DHT22H_offset
-    T = T0 * DHT22T_gain + DHT22H_offset
+    T = T0 * DHT22T_gain + DHT22T_offset
     D.append(T)
     D.append(H)
     if DEBUG:print '  T0 = {0:0.1f}*C        H0 = {1:0.1f}%'.format(T0, H0)
