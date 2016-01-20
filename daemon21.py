@@ -40,7 +40,7 @@ sensor_pin = 'AIN6'
 # gain(old)
 TMP36_gain = 0.1
 # offset(old)
-TMP36_offset = -50.0
+TMP36_offset = -50.7
 
 class MyDaemon(Daemon):
   def run(self):
