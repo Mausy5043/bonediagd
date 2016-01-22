@@ -19,7 +19,7 @@ T2_min = T2_min + utc_offset - 946684800
 T2_max = T2_max + utc_offset - 946684800
 
 # ****************************************************************** Title *****
-set title "DHT22 measurements"
+set title "Humidity (DHT22)"
 #"-".utc_offset."-"
 
 # ***************************************************************** X-axis *****
@@ -31,12 +31,12 @@ set xtics rotate by 40 right
 set xrange [ T2_min : T2_max ]
 
 # ***************************************************************** Y-axis *****
-set ylabel "Temperature [degC]"
+set ylabel "Humidity [%]"
 #set yrange [10:20]
 set autoscale y
 
 # **************************************************************** Y2-axis *****
-set y2label "Humidity [%]"
+set y2label "Temperature [degC]"
 set autoscale y2
 set y2tics border
 
@@ -53,5 +53,5 @@ set key left top
 set output "/tmp/bonediagd/plot2.png"
 
 # ***** PLOT *****
-plot "/tmp/sql22.csv"  using ($2+utc_offset):4 title " Temperature [degC]"      with points pt 5 ps 0.2\
-    ,"/tmp/sql22.csv"  using ($2+utc_offset):3 title " Humidity [%]" axes x1y2  with points pt 5 ps 0.2\
+plot "/tmp/sql22.csv"  using ($2+utc_offset):3 title " Humidity [%]"      with points pt 5 ps 0.2\
+    ,"/tmp/sql22.csv"  using ($2+utc_offset):4 title " Temperature [degC]" axes x1y2  with dots\
