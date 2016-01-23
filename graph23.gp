@@ -52,7 +52,7 @@ set key inside vertical
 set key left top
 
 # ***************************************************************** Output *****
-set output "/tmp/bonediagd/plot3.png"
+set output "/tmp/bonediagd/PT.png"
 
 # ***** PLOT *****
 plot "/tmp/sql23.csv"  using ($2+utc_offset):3 title " Pressure [mbar]"      with points pt 5 ps 0.2\

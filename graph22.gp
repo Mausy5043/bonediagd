@@ -50,7 +50,7 @@ set key inside vertical
 set key left top
 
 # ***************************************************************** Output *****
-set output "/tmp/bonediagd/plot2.png"
+set output "/tmp/bonediagd/RHT.png"
 
 # ***** PLOT *****
 plot "/tmp/sql22.csv"  using ($2+utc_offset):3 title " Humidity [%]"      with points pt 5 ps 0.2\

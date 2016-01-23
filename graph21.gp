@@ -50,7 +50,7 @@ set key inside vertical
 set key left top
 
 # ***************************************************************** Output *****
-set output "/tmp/bonediagd/plot.png"
+set output "/tmp/bonediagd/Tdiag.png"
 
 # ***** PLOT *****
 plot "/tmp/sql21.csv"  using ($2+utc_offset):4 title " TMP36   [degC]"      with points pt 5 ps 0.2\
