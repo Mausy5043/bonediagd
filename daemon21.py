@@ -109,7 +109,7 @@ class MyDaemon(Daemon):
 def do_work():
   D = []
   V = ADC.read_raw(sensor_pin)
-  D.append(V)
+  #D.append(V)
   T = V * TMP36_gain + TMP36_offset
   D.append(T)
   return D
