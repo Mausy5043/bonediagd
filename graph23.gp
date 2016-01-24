@@ -1,6 +1,6 @@
 #!/usr/bin/env gnuplot
 
-# graph of DHT22 data
+# graph of BMP183 data
 
 # ******************************************************* General settings *****
 set terminal png font "Helvetica" 11 size 640,480
