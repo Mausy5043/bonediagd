@@ -55,7 +55,7 @@ class MyDaemon(Daemon):
       raise
 
     iniconf = ConfigParser.ConfigParser()
-    inisection = "21"
+    inisection = "25"
     home = os.path.expanduser('~')
     s = iniconf.read(home + '/bonediagd/config.ini')
     if DEBUG: print "config file : ", s
@@ -142,7 +142,7 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/bonediagd/21.pid')
+  daemon = MyDaemon('/tmp/bonediagd/25.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
