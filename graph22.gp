@@ -51,6 +51,8 @@ set key inside vertical
 set key left top
 
 # ***************************************************************** Output *****
+set arrow from graph 0,graph 0 to graph 0,graph 1 nohead lc rgb "red" front
+set arrow from graph 1,graph 0 to graph 1,graph 1 nohead lc rgb "green" front
 set object 1 rect from screen 0,0 to screen 1,1 behind
 set object 1 rect fc rgb "#eeeeee" fillstyle solid 1.0 noborder
 set object 2 rect from graph 0,0 to graph 1,1 behind
