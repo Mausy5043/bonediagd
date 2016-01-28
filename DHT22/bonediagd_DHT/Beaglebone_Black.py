@@ -205,7 +205,7 @@ def read(sensor, pin):
       gpio = (int(match.group(1)), int(match.group(2)))
   if gpio is None or gpio[0] < 0 or gpio[0] > 3 or gpio[1] < 0 or gpio[1] > 31:
     raise ValueError('Pin must be a valid GPIO identifier like P9_12 or GPIO1_28.')
-  # Get a reading from C driver code.
+  # CCCCCCCCCCC Get a reading from C driver code.  CCCCCCCCCCC
   result, humidity, temp = driver.read(sensor, gpio[0], gpio[1])
   if result in common.TRANSIENT_ERRORS:
     # Signal no result could be obtained, but the caller can retry.
