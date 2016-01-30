@@ -28,7 +28,7 @@ fi
 echo "# m h dom mon dow user  command" | tee /etc/cron.d/bonediagd
 echo "42  * *   *   *   $ME    $HOME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | tee --append /etc/cron.d/bonediagd
 echo "*/5  * *   *   *  $ME    $HOME/bonediagd/testgraph.sh 2>&1 | logger -p info -t testgraphs" | tee --append /etc/cron.d/bonediagd
-echo "@reboot           $ME    sleep 60; $HOME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | tee --append /etc/cron.d/bonediagd
+echo "@reboot           $ME    sleep 120; $HOME/bonediagd/00-scriptmanager.sh 2>&1 | logger -p info -t bonediagd" | tee --append /etc/cron.d/bonediagd
 echo "@reboot           $ME    echo nocape-w1 > /sys/devices/bone_capemgr.9/slots" | tee --append /etc/cron.d/bonediagd
 
 if [ ! -e /mnt/share1 ]; then
