@@ -58,8 +58,8 @@ set object 2 rect fc rgb "#ffffff" fillstyle solid 1.0 noborder
 set output "/tmp/bonediagd/Tdiag.png"
 
 # ***** PLOT *****
-plot "/tmp/sql21.csv"  using ($2+utc_offset):3 title "Room    [degC]"     with points pt 6 ps 0.2\
+plot "/tmp/sql25.csv"  using ($2+utc_offset):3 title "TMP36   [degC]"     with points pt 6 ps 0.2\
     ,"/tmp/sql22.csv"  using ($2+utc_offset):4 title "DHT22   [degC]"     with points pt 5 ps 0.2\
     ,"/tmp/sql23.csv"  using ($2+utc_offset):4 title "BMP183  [degC]"     with points pt 5 ps 0.2\
     ,"/tmp/sql24.csv"  using ($2+utc_offset):3 title "DS18B20 [degC]"     with points pt 5 ps 0.2\
-    ,"/tmp/sql25.csv"  using ($2+utc_offset):3 title "TMP36   [degC]"     with dots\
+#    ,"/tmp/sql21.csv"  using ($2+utc_offset):3 title "Room    [degC]"     with dots\
