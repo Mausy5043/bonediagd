@@ -106,6 +106,10 @@ def do_writesample(cnsql, cmd, sample):
       cursql.close()
     print(e.__doc__)
     syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+    logtext = "  ** %s" % (cmd)
+    syslog.syslog(syslog.LOG_ALERT,logtext)
+    logtext = "  ** %s" % (sample)
+    syslog.syslog(syslog.LOG_ALERT,logtext)
     syslog_trace(traceback.format_exc())
 
 def do_sql_data(flock, inicnfg, cnsql):
@@ -142,7 +146,9 @@ def do_sql_data(flock, inicnfg, cnsql):
           #endif
         except:
           errsql = True
-          if DEBUG:print "** Error while attempting to write data to DB"
+          logtext = "  ** Error while attempting to write data to DB"
+          if DEBUG:print logtext
+          syslog.syslog(syslog.LOG_ALERT,logtext)
           syslog.syslog(syslog.LOG_ALERT,e.__doc__)
           syslog_trace(traceback.format_exc())
 
