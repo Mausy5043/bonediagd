@@ -115,6 +115,8 @@ def do_writesample(cnsql, cmd, sample):
     logtext = "  ** %s" % (e.args[1])
     syslog.syslog(syslog.LOG_ALERT,logtext)
     syslog_trace(traceback.format_exc())
+    if e.args[0] == 2006:
+      raise
 
 def do_sql_data(flock, inicnfg, cnsql):
   if DEBUG:print "Pushing data to MySQL-server"
