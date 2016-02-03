@@ -110,6 +110,10 @@ def do_writesample(cnsql, cmd, sample):
     syslog.syslog(syslog.LOG_ALERT,logtext)
     logtext = "  ** %s" % (sample)
     syslog.syslog(syslog.LOG_ALERT,logtext)
+    logtext = "  ** %s" % (e.args[0])
+    syslog.syslog(syslog.LOG_ALERT,logtext)
+    logtext = "  ** %s" % (e.args[1])
+    syslog.syslog(syslog.LOG_ALERT,logtext)
     syslog_trace(traceback.format_exc())
 
 def do_sql_data(flock, inicnfg, cnsql):
