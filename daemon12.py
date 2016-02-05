@@ -16,13 +16,14 @@ import ConfigParser
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
+leaf = os.path.realpath(__file__).split('/').[-2]
 
 class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "12"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/bonediagd/config.ini')
+    s = iniconf.read(home + '/' + leaf + '/config.ini')
     if DEBUG: print "config file : ", s
     if DEBUG: print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -102,9 +103,9 @@ def do_report(result, flock, fdata):
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
   result = ', '.join(map(str, result))
-  #flock = '/tmp/bonediagd/12.lock'
+  #flock = '/tmp/' + leaf + '/12.lock'
   lock(flock)
-  #f = file('/tmp/bonediagd/12-load-cpu.csv', 'a')
+  #f = file('/tmp/' + leaf + '/12-load-cpu.csv', 'a')
   f = file(fdata, 'a')
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
@@ -118,7 +119,7 @@ def unlock(fname):
     os.remove(fname)
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/bonediagd/12.pid')
+  daemon = MyDaemon('/tmp/' + leaf + '/12.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()

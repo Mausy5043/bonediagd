@@ -15,13 +15,14 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
+leaf = os.path.realpath(__file__).split('/').[-2]
 
 class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "11"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/bonediagd/config.ini')
+    s = iniconf.read(home + '/' + leaf + '/config.ini')
     if DEBUG: print "config file : ", s
     if DEBUG: print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -106,7 +107,7 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/bonediagd/11.pid')
+  daemon = MyDaemon('/tmp/' + leaf + '/11.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
