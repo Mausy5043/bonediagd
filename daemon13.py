@@ -16,7 +16,7 @@ import ConfigParser
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/').[-2]
+leaf = os.path.realpath(__file__).split('/')[-2]
 
 class MyDaemon(Daemon):
   def run(self):

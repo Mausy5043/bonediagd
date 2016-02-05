@@ -25,7 +25,7 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/').[-2]
+leaf = os.path.realpath(__file__).split('/')[-2]
 
 sensor_type = bonediagd_DHT.DHT22
 sensor_pin  = 'P8_15'

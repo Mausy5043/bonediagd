@@ -24,7 +24,7 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/').[-2]
+leaf = os.path.realpath(__file__).split('/')[-2]
 
 # SENSOR CALIBRATION PROCEDURE
 # Given the existing gain and offset.

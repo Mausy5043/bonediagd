@@ -24,7 +24,7 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/').[-2]
+leaf = os.path.realpath(__file__).split('/')[-2]
 
 sensor_pin = 'AIN6'
 # SENSOR CALIBRATION PROCEDURE

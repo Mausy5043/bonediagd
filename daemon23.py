@@ -31,7 +31,7 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
-leaf = os.path.realpath(__file__).split('/').[-2]
+leaf = os.path.realpath(__file__).split('/')[-2]
 
 # Create a new instance of the BMP183 class using SPI0 with the
 # default CS0 chip select pin:
