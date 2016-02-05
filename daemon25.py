@@ -24,6 +24,7 @@ from libdaemon import Daemon
 
 DEBUG = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
+leaf = os.path.realpath(__file__).split('/')[-2]
 
 sensor_pin = 'AIN6'
 # SENSOR CALIBRATION PROCEDURE
@@ -57,7 +58,7 @@ class MyDaemon(Daemon):
     iniconf = ConfigParser.ConfigParser()
     inisection = "25"
     home = os.path.expanduser('~')
-    s = iniconf.read(home + '/bonediagd/config.ini')
+    s = iniconf.read(home + '/' + leaf + '/config.ini')
     if DEBUG: print "config file : ", s
     if DEBUG: print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
@@ -142,7 +143,7 @@ def syslog_trace(trace):
       syslog.syslog(syslog.LOG_ALERT,line)
 
 if __name__ == "__main__":
-  daemon = MyDaemon('/tmp/bonediagd/25.pid')
+  daemon = MyDaemon('/tmp/' + leaf + '/25.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
       daemon.start()
