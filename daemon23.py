@@ -22,7 +22,7 @@ import syslog, traceback
 import os, sys, time, math
 import ConfigParser
 
-import bbio
+from bbio import SPI0
 # Import the BMP183 class from the BMP183 library:
 from bbio.libraries.BMP183 import BMP183
 
