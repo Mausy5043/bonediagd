@@ -148,7 +148,7 @@ def do_sql_data(flock, inicnfg, cnsql):
 
         try:
           data = cat(ifile).splitlines()
-          if (len(data) > 0):
+          if data:
             for entry in range(0, len(data)):
               #if DEBUG:print data[entry]
               errsql = do_writesample(cnsql, sqlcmd, data[entry])
