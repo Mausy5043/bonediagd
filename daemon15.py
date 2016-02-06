@@ -104,7 +104,7 @@ def do_report(result, flock, fdata):
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   result = ', '.join(map(str, result))
   lock(flock)
-  f = file(fdata, 'a')
+  f = open(fdata, 'a')
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
   unlock(flock)

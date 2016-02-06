@@ -123,7 +123,7 @@ def do_report(result, flock, fdata):
   outEpoch = outEpoch - (outEpoch % 60)
   fresult = ', '.join(map(str, result))
   lock(flock)
-  f = file(fdata, 'a')
+  f = open(fdata, 'a')
   f.write('{0}, {1}, {2}\n'.format(outDate, outEpoch, fresult) )
   f.close()
   unlock(flock)

@@ -70,14 +70,14 @@ def do_work():
   Tcpu = "NaN"
   # Read the CPU temperature
   fi   = "/sys/class/hwmon/hwmon0/device/temp1_input"
-  f    = file(fi,'r')
+  f    = open(fi,'r')
   Tcpu = float(f.read().strip('\n'))/1000
   f.close()
   if Tcpu > 75.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
     time.sleep(7)
     fi   = "/sys/class/hwmon/hwmon0/device/temp1_input"
-    f    = file(fi,'r')
+    f    = open(fi,'r')
     Tcpu = float(f.read().strip('\n'))/1000
     Tcpu = float(Tcpu) + 0.1
 
@@ -87,7 +87,7 @@ def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   lock(flock)
-  f = file(fdata, 'a')
+  f = open(fdata, 'a')
   f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)
