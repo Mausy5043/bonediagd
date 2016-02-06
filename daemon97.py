@@ -172,9 +172,9 @@ def do_sql_data(flock, inicnfg, cnsql):
       ofile = inicnfg.get(inisect,"rawfile")
       if DEBUG:print ofile
       if not errsql:                    # SQL-job was successful or non-existing
-        if os.path.isfile(ifile):       # resultfile exists
-          if not os.path.isfile(ofile): # rawfile does not exist
-            shutil.move(ifile, ofile)   # then move the file over
+        if os.path.isfile(ifile):       # IF resultfile exists
+          if not os.path.isfile(ofile): # AND rawfile does not exist
+            shutil.move(ifile, ofile)   # THEN move the file over
     except:
       if DEBUG:print " No rawfile defined for section or error while moving", inisect
   #endfor

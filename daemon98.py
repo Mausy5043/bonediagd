@@ -62,8 +62,8 @@ def do_mv_data(rpath):
   clientlock = rpath + '/client.lock'
   count_internal_locks=1
 
-  # wait 3 seconds for processes to finish
-  time.sleep(3)
+  # wait 5 seconds for processes to finish
+  time.sleep(5)
 
   while os.path.isfile(hostlock):
     if DEBUG:print "hostlock exists"
