@@ -92,6 +92,7 @@ def cat(filename):
   return ret
 
 def do_writesample(cnsql, cmd, sample):
+  fail = False
   dat = (sample.split(', '))
   try:
     cursql = cnsql.cursor()
@@ -100,6 +101,7 @@ def do_writesample(cnsql, cmd, sample):
     cnsql.commit()
     cursql.close()
   except mdb.Error, e:
+    fail = True
     print "*** MySQL error"
     print "**** Error %d: %s" % (e.args[0],e.args[1])
     if cursql:    # attempt to close connection to MySQLdb
@@ -118,6 +120,7 @@ def do_writesample(cnsql, cmd, sample):
     syslog_trace(traceback.format_exc())
     if e.args[0] == 2006:
       raise
+  return fail
 
 def do_sql_data(flock, inicnfg, cnsql):
   if DEBUG:print "Pushing data to MySQL-server"
@@ -148,7 +151,7 @@ def do_sql_data(flock, inicnfg, cnsql):
           if (len(data) > 0):
             for entry in range(0, len(data)):
               #if DEBUG:print data[entry]
-              do_writesample(cnsql, sqlcmd, data[entry])
+              errsql = do_writesample(cnsql, sqlcmd, data[entry])
             #endfor
           #endif
         except:
