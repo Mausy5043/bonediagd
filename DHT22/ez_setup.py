@@ -112,8 +112,7 @@ def archive_context(filename):
 
 
 def _do_download(version, download_base, to_dir, download_delay):
-    egg = os.path.join(to_dir, 'setuptools-%s-py%d.%d.egg'
-                       % (version, sys.version_info[0], sys.version_info[1]))
+    egg = os.path.join(to_dir, 'setuptools-{0!s}-py{1:d}.{2:d}.egg'.format(version, sys.version_info[0], sys.version_info[1]))
     if not os.path.exists(egg):
         archive = download_setuptools(version, download_base,
                                       to_dir, download_delay)
@@ -278,7 +277,7 @@ def download_setuptools(version=DEFAULT_VERSION, download_base=DEFAULT_URL,
     """
     # making sure we use the absolute path
     to_dir = os.path.abspath(to_dir)
-    zip_name = "setuptools-%s.zip" % version
+    zip_name = "setuptools-{0!s}.zip".format(version)
     url = download_base + zip_name
     saveto = os.path.join(to_dir, zip_name)
     if not os.path.exists(saveto):  # Avoid repeated downloads
