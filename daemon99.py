@@ -67,8 +67,8 @@ def do_xml(wpath):
   Tcpu = "(no T-sensor)"
   if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
     fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
-    with (fi,'r') as f:
-      Tcpu            = float(f.read().strip('\n'))/1000
+    with open(fi,'r') as f:
+      Tcpu = float(f.read().strip('\n'))/1000
 
 
   fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
