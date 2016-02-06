@@ -86,7 +86,7 @@ class MyDaemon(Daemon):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    with open(filename,'r') as f
+    with open(filename,'r') as f:
       ret = f.read().strip('\n')
   return ret
 

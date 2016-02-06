@@ -84,7 +84,7 @@ def syslog_trace(trace):
 def do_work():
   # 6 #datapoints gathered here
   fi   = "/proc/loadavg"
-  with open(fi,'r') as f
+  with open(fi,'r') as f:
     outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
 
   # 5 #datapoints gathered here
@@ -105,7 +105,7 @@ def do_report(result, flock, fdata):
   #flock = '/tmp/' + leaf + '/12.lock'
   lock(flock)
   #f = open('/tmp/' + leaf + '/12-load-cpu.csv', 'a')
-  with open(fdata, 'a') as f
+  with open(fdata, 'a') as f:
     f.write('{0}, {1}\n'.format(outDate, result) )
   unlock(flock)
 

@@ -67,22 +67,22 @@ def do_xml(wpath):
   Tcpu = "(no T-sensor)"
   if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
     fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
-    with (fi,'r') as f
+    with (fi,'r') as f:
       Tcpu            = float(f.read().strip('\n'))/1000
 
 
   fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-  with open(fi,'r') as f
+  with open(fi,'r') as f:
     fcpu						= float(f.read().strip('\n'))/1000
 
 
   fi = home + "/.bonediagd.branch"
-  with open(fi,'r') as f
+  with open(fi,'r') as f:
     bonediagdbranch = f.read().strip('\n')
 
 
   fi = home + "/.boneboot.branch"
-  with open(fi,'r') as f
+  with open(fi,'r') as f:
     bonebootbranch  = f.read().strip('\n')
 
 
@@ -99,7 +99,7 @@ def do_xml(wpath):
   p8              = subprocess.Popen(["sed", "s/</\&lt;/g"], stdin=p7.stdout, stdout=subprocess.PIPE)
   psout           = p8.stdout.read()
   #
-  with open(wpath + '/status.xml', 'w') as f
+  with open(wpath + '/status.xml', 'w') as f:
 
     f.write('<server>\n')
 

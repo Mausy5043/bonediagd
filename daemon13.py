@@ -75,7 +75,7 @@ def syslog_trace(trace):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    with open(filename,'r') as f
+    with open(filename,'r') as f:
       ret = f.read().strip('\n')
   return ret
 
@@ -112,7 +112,7 @@ def do_report(result, flock, fdata):
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   result = ', '.join(map(str, result))
   lock(flock)
-  with open(fdata, 'a') as f
+  with open(fdata, 'a') as f:
     f.write('{0}, {1}\n'.format(outDate, result) )
   unlock(flock)
 
