@@ -86,9 +86,8 @@ class MyDaemon(Daemon):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    f = open(filename,'r')
-    ret = f.read().strip('\n')
-    f.close()
+    with open(filename,'r') as f
+      ret = f.read().strip('\n')
   return ret
 
 def do_writesample(cnsql, cmd, sample):

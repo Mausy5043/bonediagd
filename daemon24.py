@@ -102,9 +102,8 @@ class MyDaemon(Daemon):
         raise
 
 def read_temp_raw():
-  f = open(OWfile, 'r')
-  lines = f.readlines()
-  f.close()
+  with open(OWfile, 'r') as f
+    lines = f.readlines()
   return lines
 
 def do_work():
@@ -132,9 +131,8 @@ def do_report(result, flock, fdata):
   outEpoch = outEpoch - (outEpoch % 60)
   fresult = ', '.join(map(str, result))
   lock(flock)
-  f = open(fdata, 'a')
-  f.write('{0}, {1}, {2}\n'.format(outDate, outEpoch, fresult) )
-  f.close()
+  with open(fdata, 'a') as f
+    f.write('{0}, {1}, {2}\n'.format(outDate, outEpoch, fresult) )
   unlock(flock)
 
 def lock(fname):

@@ -66,25 +66,25 @@ def do_xml(wpath):
 
   Tcpu = "(no T-sensor)"
   if os.path.isfile('/sys/class/hwmon/hwmon0/device/temp1_input'):
-    fi              = "/sys/class/hwmon/hwmon0/device/temp1_input"
-    f 							= open(fi,'r')
-    Tcpu            = float(f.read().strip('\n'))/1000
-    f.close()
+    fi = "/sys/class/hwmon/hwmon0/device/temp1_input"
+    with (fi,'r') as f
+      Tcpu            = float(f.read().strip('\n'))/1000
 
-  fi              = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-  f 							= open(fi,'r')
-  fcpu						= float(f.read().strip('\n'))/1000
-  f.close()
 
-  fi              = home + "/.bonediagd.branch"
-  f 							= open(fi,'r')
-  bonediagdbranch = f.read().strip('\n')
-  f.close()
+  fi = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+  with open(fi,'r') as f
+    fcpu						= float(f.read().strip('\n'))/1000
 
-  fi              = home + "/.boneboot.branch"
-  f 							= open(fi,'r')
-  bonebootbranch  = f.read().strip('\n')
-  f.close()
+
+  fi = home + "/.bonediagd.branch"
+  with open(fi,'r') as f
+    bonediagdbranch = f.read().strip('\n')
+
+
+  fi = home + "/.boneboot.branch"
+  with open(fi,'r') as f
+    bonebootbranch  = f.read().strip('\n')
+
 
   uptime          = commands.getoutput("uptime")
   dfh             = commands.getoutput("df -h")
@@ -99,37 +99,35 @@ def do_xml(wpath):
   p8              = subprocess.Popen(["sed", "s/</\&lt;/g"], stdin=p7.stdout, stdout=subprocess.PIPE)
   psout           = p8.stdout.read()
   #
-  f = open(wpath + '/status.xml', 'w')
+  with open(wpath + '/status.xml', 'w') as f
 
-  f.write('<server>\n')
+    f.write('<server>\n')
 
-  f.write('<name>\n')
-  f.write(uname[1] + '\n')
-  f.write('</name>\n')
+    f.write('<name>\n')
+    f.write(uname[1] + '\n')
+    f.write('</name>\n')
 
-  f.write('<df>\n')
-  f.write(dfh + '\n')
-  f.write('</df>\n')
+    f.write('<df>\n')
+    f.write(dfh + '\n')
+    f.write('</df>\n')
 
-  f.write('<temperature>\n')
-  f.write(str(Tcpu) + ' degC @ '+ str(fcpu) +' MHz\n')
-  f.write('</temperature>\n')
+    f.write('<temperature>\n')
+    f.write(str(Tcpu) + ' degC @ '+ str(fcpu) +' MHz\n')
+    f.write('</temperature>\n')
 
-  f.write('<memusage>\n')
-  f.write(freeh + '\n')
-  f.write('</memusage>\n')
+    f.write('<memusage>\n')
+    f.write(freeh + '\n')
+    f.write('</memusage>\n')
 
-  f.write(' <uptime>\n')
-  f.write(uptime + '\n')
-  f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
-  f.write(' - bonediagd   on: '+ bonediagdbranch +'\n')
-  f.write(' - boneboot    on: '+ bonebootbranch +'\n')
-  f.write('\nTop 10 processes:\n' + psout +'\n')
-  f.write('</uptime>\n')
+    f.write(' <uptime>\n')
+    f.write(uptime + '\n')
+    f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
+    f.write(' - bonediagd   on: '+ bonediagdbranch +'\n')
+    f.write(' - boneboot    on: '+ bonebootbranch +'\n')
+    f.write('\nTop 10 processes:\n' + psout +'\n')
+    f.write('</uptime>\n')
 
-  f.write('</server>\n')
-
-  f.close()
+    f.write('</server>\n')
 
 def lock(fname):
   open(fname, 'a').close()
