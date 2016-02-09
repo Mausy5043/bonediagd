@@ -10,7 +10,7 @@ UTCOFFSET=$(($LOCALSECONDS-$UTCSECONDS))
 
 interval="INTERVAL 25 HOUR "
 
-pushd $HOME/bonediagd
+pushd $HOME/bonediagd >/dev/null
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM temper where (sample_time) >=NOW() - $interval;" | sed 's/\t/;/g;s/\n//g' > /tmp/sql21.csv
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM dht22  where (sample_time) >=NOW() - $interval;" | sed 's/\t/;/g;s/\n//g' > /tmp/sql22.csv
   mysql -h sql.lan --skip-column-names -e "USE domotica; SELECT * FROM bmp183 where (sample_time) >=NOW() - $interval;" | sed 's/\t/;/g;s/\n//g' > /tmp/sql23.csv
@@ -28,4 +28,4 @@ pushd $HOME/bonediagd
   gnuplot -e "utc_offset='${UTCOFFSET}'" ./graph25.gp
 
   rm /tmp/bonediagd/graph.lock
-popd
+popd >/dev/null
