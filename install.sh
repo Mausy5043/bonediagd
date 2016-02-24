@@ -52,10 +52,16 @@ chmod +x dtc.sh
 ./dtc.sh
 popd
 /usr/local/bin/dtc -O dtb -o /lib/firmware/nocape-w1-00A0.dtbo -b 0 -@ nocape-w1.dts
+
 echo nocape-w1 > /sys/devices/bone_capemgr.9/slots
 cat /sys/devices/bone_capemgr.9/slots
 #la  /sys/devices/w1_bus_master1
 cat /sys/bus/w1/devices/28-*/w1_slave
+
+echo "Patch BMP183.py"
+
+# /usr/local/lib/python2.7/dist-packages/bbio/libraries/BMP183/BMP183.py
+# https://github.com/graycatlabs/PyBBIO/issues/79
 
 ./00-scriptmanager.sh
 

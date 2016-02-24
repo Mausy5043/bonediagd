@@ -99,7 +99,12 @@ def do_writesample(cnsql, cmd, sample):
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
-  except mdb.Error, e:
+  except OperationalError as e:
+    #do what you want to do on the error
+    reconnect()
+    if DEBUG: print e
+    syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
+    syslog.syslog(syslog.LOG_ALERT,e)
     fail = True
     print "*** MySQL error"
     print "**** Error {0:d}: {1!s}".format(e.args[0], e.args[1])
@@ -117,8 +122,9 @@ def do_writesample(cnsql, cmd, sample):
     logtext = "  ** {0!s}".format((e.args[1]))
     syslog.syslog(syslog.LOG_ALERT,logtext)
     syslog_trace(traceback.format_exc())
-    if e.args[0] == 2006:
-      raise
+    #if e.args[0] == 2006:
+    #  syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
+    #  raise
   return fail
 
 def do_sql_data(flock, inicnfg, cnsql):
@@ -145,21 +151,20 @@ def do_sql_data(flock, inicnfg, cnsql):
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect,"sqlcmd")
 
-        try:
-          data = cat(ifile).splitlines()
-          if data:
-            for entry in range(0, len(data)):
-              #if DEBUG:print data[entry]
-              errsql = do_writesample(cnsql, sqlcmd, data[entry])
-            #endfor
-          #endif
-        except:
-          errsql = True
-          logtext = "  ** Error while attempting to write data to DB"
-          if DEBUG:print logtext
-          syslog.syslog(syslog.LOG_ALERT,logtext)
-          syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-          syslog_trace(traceback.format_exc())
+        #try:
+        data = cat(ifile).splitlines()
+        if data:
+          for entry in range(0, len(data)):
+            errsql = do_writesample(cnsql, sqlcmd, data[entry])
+          #endfor
+        #endif
+        #except:
+        #  errsql = True
+        #  logtext = "  ** Error while attempting to write data to DB"
+        #  if DEBUG:print logtext
+        #  syslog.syslog(syslog.LOG_ALERT,logtext)
+        #  syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+        #  syslog_trace(traceback.format_exc())
 
       except:
         if DEBUG:print " No SQL command defined for section", inisect
