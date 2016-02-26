@@ -127,6 +127,7 @@ def do_sql_data(flock, inicnfg, cnsql):
   if DEBUG:print "Pushing data to MySQL-server"
   # set a lock
   lock(flock)
+  time.sleep(2)
   # wait for all other processes to release their locks.
   count_internal_locks=2
   while (count_internal_locks > 1):
