@@ -38,7 +38,7 @@ class MyDaemon(Daemon):
       if consql:    # attempt to close connection to MySQLdb
         if DEBUG:print "Closing MySQL connection"
         consql.close()
-        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+        syslog.syslog(syslog.LOG_ALERT," ** Closed MySQL connection in run() **")
       syslog.syslog(syslog.LOG_ALERT,e.__doc__)
       syslog_trace(traceback.format_exc())
       raise
@@ -78,7 +78,7 @@ class MyDaemon(Daemon):
         if consql:
           if DEBUG:print "Closing MySQL connection"
           consql.close()
-          syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+          syslog.syslog(syslog.LOG_ALERT," *** Closed MySQL connection in run() ***")
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
         raise
@@ -99,27 +99,26 @@ def do_writesample(cnsql, cmd, sample):
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
-  #except OperationalError as e:
-  #  fail2write=False
-  #  reconnect()
-  #  if DEBUG: print e
-  #  syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
+  except IntegrityError as e:
+    syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+    if cursql:
+      if DEBUG:print " ** Closing MySQL connection"
+      cursql.close()
+      syslog.syslog(syslog.LOG_ALERT," ** Closed MySQL connection in do_writesample **")
+    pass
+  #except Exception as e:
+  #  fail2write=True
+  #  if DEBUG:
+  #    print "Unexpected error in do_writesample:"
+  #    print e.message
+  #  # attempt to close connection to MySQLdb
+  #  if cnsql:
+  #    if DEBUG:print "Closing MySQL connection"
+  #    cnsql.close()
+  #    syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
   #  syslog.syslog(syslog.LOG_ALERT,e.__doc__)
   #  syslog_trace(traceback.format_exc())
   #  raise
-  except Exception as e:
-    fail2write=True
-    if DEBUG:
-      print "Unexpected error in do_writesample:"
-      print e.message
-    # attempt to close connection to MySQLdb
-    if cnsql:
-      if DEBUG:print "Closing MySQL connection"
-      cnsql.close()
-      syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
-    syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-    syslog_trace(traceback.format_exc())
-    raise
 
   return fail2write
 
