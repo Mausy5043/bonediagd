@@ -108,7 +108,7 @@ def do_writesample(cnsql, cmd, sample):
   #  syslog_trace(traceback.format_exc())
   #  raise
   except Exception as e:
-    fail2write=False
+    fail2write=True
     if DEBUG:
       print "Unexpected error in do_writesample:"
       print e.message
