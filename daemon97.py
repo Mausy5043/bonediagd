@@ -124,7 +124,7 @@ def do_writesample(cnsql, cmd, sample):
     #if e.args[0] == 2006:
     #  syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
     #  raise
-  except Exception as e
+  except Exception as e:
     if DEBUG:
       print "Unexpected error:"
       print e.message
