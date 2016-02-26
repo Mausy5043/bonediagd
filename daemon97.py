@@ -110,7 +110,7 @@ def do_writesample(cnsql, cmd, sample):
   except Exception as e:
     fail2write=False
     if DEBUG:
-      print "Unexpected error:"
+      print "Unexpected error in do_writesample:"
       print e.message
     # attempt to close connection to MySQLdb
     if consql:
