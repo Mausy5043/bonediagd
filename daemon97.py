@@ -99,7 +99,7 @@ def do_writesample(cnsql, cmd, sample):
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
-  except MySQLdb.IntegrityError as e:
+  except mdb.IntegrityError as e:
     if DEBUG:print e.args
     syslog.syslog(syslog.LOG_ALERT,e.__doc__)
     if cursql:
@@ -107,24 +107,14 @@ def do_writesample(cnsql, cmd, sample):
       cursql.close()
       syslog.syslog(syslog.LOG_ALERT," ** Closed MySQL connection in do_writesample **")
     pass
-  #except Exception as e:
-  #  fail2write=True
-  #  if DEBUG:
-  #    print "Unexpected error in do_writesample:"
-  #    print e.message
-  #  # attempt to close connection to MySQLdb
-  #  if cnsql:
-  #    if DEBUG:print "Closing MySQL connection"
-  #    cnsql.close()
-  #    syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
-  #  syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-  #  syslog_trace(traceback.format_exc())
-  #  raise
 
   return fail2write
 
 def do_sql_data(flock, inicnfg, cnsql):
-  if DEBUG:print "Pushing data to MySQL-server"
+  if DEBUG:
+    print "============================"
+    print "Pushing data to MySQL-server"
+    print "============================"
   # set a lock
   lock(flock)
   time.sleep(2)
