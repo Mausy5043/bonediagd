@@ -99,7 +99,8 @@ def do_writesample(cnsql, cmd, sample):
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
-  except IntegrityError as e:
+  except MySQLdb.IntegrityError as e:
+    if DEBUG:print e.args
     syslog.syslog(syslog.LOG_ALERT,e.__doc__)
     if cursql:
       if DEBUG:print " ** Closing MySQL connection"
@@ -154,14 +155,14 @@ def do_sql_data(flock, inicnfg, cnsql):
             errsql = do_writesample(cnsql, sqlcmd, data[entry])
           #endfor
         #endif
-      except Exception as e:  #no sqlcmd
+      except ConfigParser.NoOptionError as e:  #no sqlcmd
         if DEBUG:
-          print "Unexpected error:"
-          print e.message
-    except Exception as e:  #no ifile
+          print "** No option (sqlcmd):"
+          print "** ", e.message
+    except ConfigParser.NoOptionError as e:  #no ifile
       if DEBUG:
-        print "Unexpected error:"
-        print e.message
+        print "** No option (resultfile):"
+        print "** ", e.message
 
     try:
       ofile = inicnfg.get(inisect,"rawfile")
@@ -170,10 +171,10 @@ def do_sql_data(flock, inicnfg, cnsql):
         if os.path.isfile(ifile):       # IF resultfile exists
           if not os.path.isfile(ofile): # AND rawfile does not exist
             shutil.move(ifile, ofile)   # THEN move the file over
-    except Exception as e:  #no ofile
+    except ConfigParser.NoOptionError as e:  #no ofile
       if DEBUG:
-        print "Unexpected error:"
-        print e.message
+        print "** No option (rawfile):"
+        print "** ", e.message
 
   #endfor
   unlock(flock)
