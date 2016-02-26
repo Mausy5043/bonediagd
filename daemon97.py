@@ -95,7 +95,7 @@ def do_writesample(cnsql, cmd, sample):
   dat = (sample.split(', '))
   try:
     cursql = cnsql.cursor()
-    if DEBUG:print "   ",dat
+    if DEBUG:print "      ",dat
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
@@ -132,12 +132,12 @@ def do_sql_data(flock, inicnfg, cnsql):
     errsql = False
     try:
       ifile = inicnfg.get(inisect,"resultfile")
-      if DEBUG:print ifile
+      if DEBUG:print " < ",ifile
 
       try:
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect,"sqlcmd")
-        if DEBUG:print sqlcmd
+        if DEBUG:print "   ",sqlcmd
 
         data = cat(ifile).splitlines()
         if data:
@@ -154,7 +154,7 @@ def do_sql_data(flock, inicnfg, cnsql):
 
     try:
       ofile = inicnfg.get(inisect,"rawfile")
-      if DEBUG:print ofile
+      if DEBUG:print " > ",ofile
       if not errsql:                    # SQL-job was successful or non-existing
         if os.path.isfile(ifile):       # IF resultfile exists
           if not os.path.isfile(ofile): # AND rawfile does not exist
