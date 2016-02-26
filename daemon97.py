@@ -91,40 +91,24 @@ def cat(filename):
   return ret
 
 def do_writesample(cnsql, cmd, sample):
-  fail = False
+  fail2write = False
   dat = (sample.split(', '))
   try:
     cursql = cnsql.cursor()
-    if DEBUG:print "   ",cmd,dat
+    if DEBUG:print "   ",dat
     cursql.execute(cmd, dat)
     cnsql.commit()
     cursql.close()
-  except OperationalError as e:
-    reconnect()
-    if DEBUG: print e
-    syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
-    syslog.syslog(syslog.LOG_ALERT,e)
-    fail = True
-    print "*** MySQL error"
-    print "**** Error {0:d}: {1!s}".format(e.args[0], e.args[1])
-    if cursql:    # attempt to close connection to MySQLdb
-      print "***** Closing cursor"
-      cursql.close()
-    print(e.__doc__)
-    syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-    logtext = "  ** {0!s}".format((cmd))
-    syslog.syslog(syslog.LOG_ALERT,logtext)
-    logtext = "  ** {0!s}".format((sample))
-    syslog.syslog(syslog.LOG_ALERT,logtext)
-    logtext = "  ** {0!s}".format((e.args[0]))
-    syslog.syslog(syslog.LOG_ALERT,logtext)
-    logtext = "  ** {0!s}".format((e.args[1]))
-    syslog.syslog(syslog.LOG_ALERT,logtext)
-    syslog_trace(traceback.format_exc())
-    #if e.args[0] == 2006:
-    #  syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
-    #  raise
+  #except OperationalError as e:
+  #  fail2write=False
+  #  reconnect()
+  #  if DEBUG: print e
+  #  syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
+  #  syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+  #  syslog_trace(traceback.format_exc())
+  #  raise
   except Exception as e:
+    fail2write=False
     if DEBUG:
       print "Unexpected error:"
       print e.message
@@ -136,7 +120,8 @@ def do_writesample(cnsql, cmd, sample):
     syslog.syslog(syslog.LOG_ALERT,e.__doc__)
     syslog_trace(traceback.format_exc())
     raise
-  return fail
+
+  return fail2write
 
 def do_sql_data(flock, inicnfg, cnsql):
   if DEBUG:print "Pushing data to MySQL-server"
@@ -161,26 +146,22 @@ def do_sql_data(flock, inicnfg, cnsql):
       try:
         sqlcmd = []
         sqlcmd = inicnfg.get(inisect,"sqlcmd")
+        if DEBUG:print sqlcmd
 
-        #try:
         data = cat(ifile).splitlines()
         if data:
           for entry in range(0, len(data)):
             errsql = do_writesample(cnsql, sqlcmd, data[entry])
           #endfor
         #endif
-
-      except Exception as e:
+      except Exception as e:  #no sqlcmd
         if DEBUG:
           print "Unexpected error:"
           print e.message
-        if DEBUG:print " No SQL command defined for section", inisect
-
-    except Exception as e:
+    except Exception as e:  #no ifile
       if DEBUG:
         print "Unexpected error:"
         print e.message
-      if DEBUG:print " No resultfile for section", inisect
 
     try:
       ofile = inicnfg.get(inisect,"rawfile")
@@ -189,11 +170,11 @@ def do_sql_data(flock, inicnfg, cnsql):
         if os.path.isfile(ifile):       # IF resultfile exists
           if not os.path.isfile(ofile): # AND rawfile does not exist
             shutil.move(ifile, ofile)   # THEN move the file over
-    except Exception as e:
+    except Exception as e:  #no ofile
       if DEBUG:
         print "Unexpected error:"
         print e.message
-      if DEBUG:print " No rawfile defined for section or error while moving", inisect
+
   #endfor
   unlock(flock)
 
