@@ -100,7 +100,6 @@ def do_writesample(cnsql, cmd, sample):
     cnsql.commit()
     cursql.close()
   except OperationalError as e:
-    #do what you want to do on the error
     reconnect()
     if DEBUG: print e
     syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
@@ -125,6 +124,18 @@ def do_writesample(cnsql, cmd, sample):
     #if e.args[0] == 2006:
     #  syslog.syslog(syslog.LOG_ALERT,"********* Raising!!")
     #  raise
+  except Exception as e
+    if DEBUG:
+      print "Unexpected error:"
+      print e.message
+    # attempt to close connection to MySQLdb
+    if consql:
+      if DEBUG:print "Closing MySQL connection"
+      consql.close()
+      syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+    syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+    syslog_trace(traceback.format_exc())
+    raise
   return fail
 
 def do_sql_data(flock, inicnfg, cnsql):
@@ -165,12 +176,35 @@ def do_sql_data(flock, inicnfg, cnsql):
         #  syslog.syslog(syslog.LOG_ALERT,logtext)
         #  syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         #  syslog_trace(traceback.format_exc())
+      except Exception as e:
+        if DEBUG:
+          print "Unexpected error:"
+          print e.message
+        # attempt to close connection to MySQLdb
+        if consql:
+          if DEBUG:print "Closing MySQL connection"
+          consql.close()
+          syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+        syslog_trace(traceback.format_exc())
+        raise
+        #except:
+        # if DEBUG:print " No SQL command defined for section", inisect
 
-      except:
-        if DEBUG:print " No SQL command defined for section", inisect
-
-    except:
-      if DEBUG:print " No resultfile for section", inisect
+    except Exception as e:
+      if DEBUG:
+        print "Unexpected error:"
+        print e.message
+      # attempt to close connection to MySQLdb
+      if consql:
+        if DEBUG:print "Closing MySQL connection"
+        consql.close()
+        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+      syslog_trace(traceback.format_exc())
+      raise
+    #except:
+    # if DEBUG:print " No resultfile for section", inisect
 
     try:
       ofile = inicnfg.get(inisect,"rawfile")
@@ -179,8 +213,20 @@ def do_sql_data(flock, inicnfg, cnsql):
         if os.path.isfile(ifile):       # IF resultfile exists
           if not os.path.isfile(ofile): # AND rawfile does not exist
             shutil.move(ifile, ofile)   # THEN move the file over
-    except:
-      if DEBUG:print " No rawfile defined for section or error while moving", inisect
+    except Exception as e:
+      if DEBUG:
+        print "Unexpected error:"
+        print e.message
+      # attempt to close connection to MySQLdb
+      if consql:
+        if DEBUG:print "Closing MySQL connection"
+        consql.close()
+        syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
+      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+      syslog_trace(traceback.format_exc())
+      raise
+    #except Exception as e:
+    # if DEBUG:print " No rawfile defined for section or error while moving", inisect
   #endfor
   unlock(flock)
 
