@@ -157,11 +157,9 @@ def do_sql_data(flock, inicnfg, cnsql):
         #endif
       except ConfigParser.NoOptionError as e:  #no sqlcmd
         if DEBUG:
-          print "** No option (sqlcmd):"
           print "** ", e.message
     except ConfigParser.NoOptionError as e:  #no ifile
       if DEBUG:
-        print "** No option (resultfile):"
         print "** ", e.message
 
     try:
@@ -173,7 +171,6 @@ def do_sql_data(flock, inicnfg, cnsql):
             shutil.move(ifile, ofile)   # THEN move the file over
     except ConfigParser.NoOptionError as e:  #no ofile
       if DEBUG:
-        print "** No option (rawfile):"
         print "** ", e.message
 
   #endfor
