@@ -113,9 +113,9 @@ def do_writesample(cnsql, cmd, sample):
       print "Unexpected error in do_writesample:"
       print e.message
     # attempt to close connection to MySQLdb
-    if consql:
+    if cnsql:
       if DEBUG:print "Closing MySQL connection"
-      consql.close()
+      cnsql.close()
       syslog.syslog(syslog.LOG_ALERT,"Closed MySQL connection")
     syslog.syslog(syslog.LOG_ALERT,e.__doc__)
     syslog_trace(traceback.format_exc())
