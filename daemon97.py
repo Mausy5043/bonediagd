@@ -106,7 +106,7 @@ def do_writesample(cnsql, cmd, sample):
       if DEBUG:print " ** Closing MySQL connection"
       cursql.close()
       syslog.syslog(syslog.LOG_ALERT," ** Closed MySQL connection in do_writesample **")
-      syslog.syslog(syslog.LOG_DEBUG,dat)
+      syslog.syslog(syslog.LOG_DEBUG,"{0}".format(dat))
     pass
 
   return fail2write

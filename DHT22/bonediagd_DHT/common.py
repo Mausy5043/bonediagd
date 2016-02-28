@@ -38,17 +38,6 @@ DHT22  = 22
 AM2302 = 22
 SENSORS = [DHT11, DHT22, AM2302]
 
-
-#def get_platform():
-#  """Return a DHT platform interface for the currently detected platform."""
-#  plat = platform_detect.platform_detect()
-#  if plat == platform_detect.BEAGLEBONE_BLACK:
-#    import Beaglebone_Black
-#    return Beaglebone_Black
-#  else:
-#    raise RuntimeError('Unknown platform.')
-
-#def read(sensor, pin, platform=None):
 def read(sensor, pin):
   """Read DHT sensor of specified sensor type (DHT11, DHT22, or AM2302) on
   specified pin and return a tuple of humidity (as a floating point value
