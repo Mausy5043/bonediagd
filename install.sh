@@ -16,8 +16,11 @@ echo -n "Started installing bonediagd on "
 date
 # To suppress git detecting changes by chmod:
 git config core.fileMode false
+
 # set the branch
-echo "master" > "$HOME/.bonediagd.branch"
+if [ ! -e "$HOME/.bonediagd.branch" ]; then
+  echo "master" > "$HOME/.bonediagd.branch"
+fi
 
 if [ ! -d /etc/cron.d ]; then
   echo "Creating /etc/cron.d..."
