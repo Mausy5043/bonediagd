@@ -66,7 +66,5 @@ echo "Patch BMP183.py"
 # /usr/local/lib/python2.7/dist-packages/bbio/libraries/BMP183/BMP183.py
 # https://github.com/graycatlabs/PyBBIO/issues/79
 
-./00-scriptmanager.sh
-
 echo -n "Finished installation of bonediagd on "
 date
