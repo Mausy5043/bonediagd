@@ -143,7 +143,7 @@ function destale {
   fi
 }
 
-destale 11
+#destale 11
 destale 12
 destale 13
 destale 14
